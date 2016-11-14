@@ -202,10 +202,11 @@ $chats = ChatManager::load_chats();
                         <?php
                             //hardcoded for now;
                             $curr = mysqli_fetch_assoc($chats);
+                            $_SESSION['curr-id'] = $curr['id'];
                             $_SESSION['id'] = array($curr['id'], $curr['name'], explode(",", $curr['users']));
                             $manager = new ChatManager($curr['id'], $curr['name'], explode(",", $curr['users']));
                             echo'<small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>'
-                            .$curr["name"] . '<a style="margin-left: 20px">Add user</a><a style="margin-left: 20px">Leave chat</a>';
+                            .$curr["name"] . ' (' . $curr['users'] . ')<a style="margin-left: 20px">Add user</a><a style="margin-left: 20px">Leave chat</a>';
                          ?>
                     </div>
                     <div class="ibox-content">
@@ -239,18 +240,18 @@ $chats = ChatManager::load_chats();
                                 <div class="chat-users">
                                     <div class="users-list">
                                         <?php
-                                         echo '<form class="chat-user" '. 'id=' . $curr["id"] .'>
+                                         echo '<form class="chat-user" '. 'id=' . $curr["id"] .' method="post" action="change.php">
                                                     <img class="chat-avatar" src="img/a4.jpg" alt="" >
                                                     <div class="chat-user-name">
-                                                        <a href="#">'.$curr["name"].'</a>
+                                                        <input class = "btn" type="submit" name = "chatname"' .' value="'. $curr["name"] .'">
                                                     </div>
                                                 </form>';
 
                                         while($row = mysqli_fetch_assoc($chats)){
-                                            echo '<form class="chat-user" '. 'id=' . $row["id"] .'>
+                                            echo '<form class="chat-user" '. 'id=' . $row["id"] .' method = "post" action="change.php">
                                                     <img class="chat-avatar" src="img/a4.jpg" alt="" >
                                                     <div class="chat-user-name">
-                                                        <a href="#">'.$row["name"].'</a>
+                                                        <input class = "btn" type="submit" name = "chatname"' .' value="'. $row["name"] .'">
                                                     </div>
                                                 </form>';
                                         }
@@ -266,14 +267,14 @@ $chats = ChatManager::load_chats();
                             <div class="col-lg-9">
                                 <div class="chat-message-form">
                                     <div class="form-group">
-                                        <input class="form-control message-input" name="message" placeholder="Enter message text">
+                                        <input class="form-control message-input" name="message" placeholder="Enter message text" autocomplete="off">
                                     </div>
                                 </div>
                             </div>
                             </form>
                             <div style="text-align: center; padding-top: 20px;">
                                 <form method = "post" action="addchat.php">
-                                    <button class="btn btn-primary m-b" type = "submit" name = "add">Add chat</button>
+                                    <button class="btn btn-primary m-b" type = "submit" name = "add">Create new chat</button>
                                 </form>
                             </div>
 
@@ -386,29 +387,8 @@ $chats = ChatManager::load_chats();
 <script src="js/plugins/pace/pace.min.js"></script>
 
 <script src="js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src = "js/home.js"></script>
 <script>
-    $(document).ready(function(){
-        $('.submit-message').submit(function(event){
-            event.preventDefault();
-            $.ajax({
-              type: "POST",
-              url: 'line.php',
-              dataType: "json",
-              data: {text: $('.message-input').val()},
-              success: function(data) {
-                $('.message-input').val("");
-                $('.chat-discussion').append('<div class="chat-message left"><img class="message-avatar" src="img/a1.jpg" alt="" ><div class="message"><a class="message-author" href="#">' + data.user + '</a><span class="message-date"> Mon Jan 26 2015 - 18:39:23 </span><span class="message-content">' + data.message + '</span></div></div>');
-              },
-              error: function() {
-              }
-            });
-
-        });
-
-    });
-
-
-
 </script>
 </body>
 
