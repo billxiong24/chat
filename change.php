@@ -3,7 +3,6 @@ include 'ChatManager.class.php';
 include 'DataBase.class.php';
 include 'ChatLine.class.php';
 include 'ChatUser.class.php';
-//mysql_data_seek($result, 0);
 session_start();
 if(isset($_SESSION['user']) && isset($_POST['chatID'])){
 	DataBase::init();

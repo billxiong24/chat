@@ -202,7 +202,7 @@ $chats = ChatManager::load_chats();
                         <?php
                             //hardcoded for now;
                             $curr = mysqli_fetch_assoc($chats);
-                            $_SESSION['curr-id'] = $curr['id'];
+                            //stores the current chat thats open
                             $_SESSION['id'] = array($curr['id'], $curr['name'], explode(",", $curr['users']));
                             $manager = new ChatManager($curr['id'], $curr['name'], explode(",", $curr['users']));
                             echo'<small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>'
@@ -240,13 +240,7 @@ $chats = ChatManager::load_chats();
                                 <div class="chat-users">
                                     <div class="users-list">
                                         <?php
-                                         echo '<form class="chat-user" '. 'id=' . $curr["id"] .' method="post" action="change.php">
-                                                    <img class="chat-avatar" src="img/a4.jpg" alt="" >
-                                                    <div class="chat-user-name">
-                                                        <input class = "btn" type="submit" name = "chatname"' .' value="'. $curr["name"] .'">
-                                                    </div>
-                                                </form>';
-
+                                        mysqli_data_seek($chats, 0);
                                         while($row = mysqli_fetch_assoc($chats)){
                                             echo '<form class="chat-user" '. 'id=' . $row["id"] .' method = "post" action="change.php">
                                                     <img class="chat-avatar" src="img/a4.jpg" alt="" >
