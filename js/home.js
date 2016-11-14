@@ -1,4 +1,9 @@
 $(document).ready(function(){
+    refresh = setInterval(function(){
+       refreshMessages();
+    
+    }, 100);
+
     $('.submit-message').submit(function(event){
         event.preventDefault();
         $.ajax({
@@ -34,4 +39,21 @@ $(document).ready(function(){
         });
   });
 
+  function refreshMessages(){
+      $.ajax({
+          type: "POST",
+          url: 'refresh.php',
+          dataType: "json",
+          data: {test: "hello"},
+          success: function(data){
+              $('.chat-discussion').html(data.messages);
+              //console.log(data.t);
+              //console.log(data.messages);
+          },
+          error: function(){
+              console.log("error");
+          }
+      });
+  }
+  
 });

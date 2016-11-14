@@ -4,6 +4,9 @@ class Display{
         return '<small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>'
                                 .$curr["name"] . ' (' . $curr['users'] . ')<a style="margin-left: 20px">Add user</a><a style="margin-left: 20px">Leave chat</a>';
     }
+
+
+
     //manager is an instance of ChatManager, reloads all messages
     //TODO track last message ID to avoid reloading all messages
     public static function change_messages($manager){
