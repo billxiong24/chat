@@ -1,7 +1,6 @@
 $(document).ready(function(){
     refresh = setInterval(function(){
        refreshMessages();
-    
     }, 100);
 
     $('.submit-message').submit(function(event){
@@ -38,7 +37,7 @@ $(document).ready(function(){
           }
         });
   });
-
+  
   function refreshMessages(){
       $.ajax({
           type: "POST",
@@ -47,6 +46,8 @@ $(document).ready(function(){
           data: {test: "hello"},
           success: function(data){
               $('.chat-discussion').html(data.messages);
+              $('.users-list').html(data.chats);
+              //data.chats contains chat list
               //console.log(data.t);
               //console.log(data.messages);
           },

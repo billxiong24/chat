@@ -15,12 +15,12 @@ if(isset($_SESSION['user'])){
         if($curr['id'] == $curr_chat)
             break;
     }
-
+   
      
 	$manager = new ChatManager($curr['id'], $curr['name'], explode(",", $curr['users']));
 	$messages = Display::change_messages($manager);
-    
-    echo json_encode(array("messages"=>$messages));
+    $chats = Display::change_chat_list($chat);
+    echo json_encode(array("messages"=>$messages, "chats"=>$chats));
 
 }
 
