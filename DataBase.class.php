@@ -27,5 +27,10 @@ class DataBase{
         }
         return $result;
     }
+    public static function escape($str){
+        $database = self::$instance->database;
+        return mysqli_real_escape_string($database, $str);
+    
+    }
 }
 ?>

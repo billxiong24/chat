@@ -4,7 +4,7 @@ class ChatLine{
     private $username;
     private $chat_id;
     public function __construct($text, $user, $chat_id){
-        $this->text = $text;
+        $this->text = DataBase::escape($text);
         $this->username = $user;
         $this->chat_id = $chat_id; 
     }
