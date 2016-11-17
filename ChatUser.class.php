@@ -15,13 +15,14 @@ class ChatUser{
         while($row = mysqli_fetch_assoc($res)){
             $count++;
         }
+        //user exists
         if($count){
-           echo "User exists"; 
-           return;
+           return false;
         }
         $query = "INSERT INTO users (username, password, first, last) ";
         $query .= "VALUES ('".$this->username."','".$this->password."', '".$this->first."', '".$this->last."')"; 
         DataBase::make_query($query);     
+        return true;
     }
     
     

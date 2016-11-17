@@ -5,8 +5,10 @@ include 'ChatLine.class.php';
 include 'ChatUser.class.php';
 //TODO real auth here
 session_start();
-$_SESSION['user'] = "hw12";
 DataBase::init();
+if(!isset($_SESSION['user'])){
+    header("Location: index.php");
+}
 //hashmap maybe
 /*if(isset($_SESSION['chats']) && isset($_POST['message'])){
     $man = $_SESSION['chats'][0]->submit_chat($_POST['message']);
