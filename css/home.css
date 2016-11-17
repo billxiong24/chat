@@ -1,0 +1,27 @@
+.btn-primary{
+	background-color: transparent;
+	color: #464646;
+	border: solid #464646 1px;
+	border-radius: 5px;
+	width: 180px;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open .dropdown-toggle.btn-primary,
+.btn-primary:active:focus,
+.btn-primary:active:hover,
+.btn-primary.active:hover,
+.btn-primary.active:focus {
+  background-color: #424242;
+  border-color: #424242;
+  color: #FFFFFF;
+}
+.small-buttons{
+    margin-right: 20px;
+    width: 30px;
+    background-color: transparent;
+    border: none;
+
+}
