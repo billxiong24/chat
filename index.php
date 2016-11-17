@@ -74,8 +74,15 @@ if(isset($_SESSION['user'])){
                             <div id="content-register2">
                                 <div class="content">
                                       <div class="loginColumns">
+                                           <form class="m-t" role="form" method="post" action="signup.php">
                                         <div class="row">
                                             <div class="col-md-6" style="border-top: solid #C3C3C3 1px">
+                                                <div class="form-group" style="margin-top: 15px">
+                                                    <input class="form-control" name="firstname-signup"  placeholder="First name" autocomplete="off" required="">
+                                                </div>
+                                                <div class="form-group">
+                                                    <input class="form-control" name="lastname-signup"  placeholder="Last name" autocomplete="off" required="">
+                                                </div>
                                                 <h2 class="font-bold">Welcome to ChatIO</h2>
 
                                                 <p>
@@ -88,14 +95,10 @@ if(isset($_SESSION['user'])){
                                                     Get started by entering a username and password and clicking "Sign up". It's that easy. 
                                                 </p>
 
-                                                <p>
-                                                    <small>It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.</small>
-                                                </p>
-
+                                                
                                             </div>
                                             <div class="col-md-6" style="border-top: solid #C3C3C3 1px">
                                                 <div class="ibox-content" style="border: none">
-                                                    <form class="m-t" role="form" action="signup.php">
                                                         <div class="form-group">
                                                             <input class="form-control" name="user-signup"  placeholder="Username" autocomplete="off" required="">
                                                         </div>
@@ -109,10 +112,10 @@ if(isset($_SESSION['user'])){
                                                         </p>
                                                         <a class="btn btn-sm btn-white btn-block" id="showregister">Login</a>
                                                         <a class="btn btn-sm btn-white btn-block" id="showlogin2">Back</a>
-                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
+                                          </form>
                                         <hr/>
                                         </div>
                                     </div>
