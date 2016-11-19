@@ -201,7 +201,7 @@ $chats = ChatManager::load_chats();
                                                         <input class = "btn" type="submit" name = "chatname"' .' value="'. $row["name"] .'">
                                                     </div>
                                                     </form>
-                                                    <form class="remove-chat" method="post" action="change.php" id='.$row["id"].'>
+                                                    <form class="remove-chat" method="post" action="remove.php" id='.$row["id"].'>
                                                     <button class="small-buttons pull-right" type="submit" style="margin-top: -35px"><i class="fa fa-trash"></i></button>
                                                     </form>
                                                     </div>';

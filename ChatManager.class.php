@@ -33,7 +33,6 @@ class ChatManager{
         DataBase::make_query($query);
         $delete_lines = "DELETE FROM chat_lines WHERE chat_id = '".$this->chat_id."'";
         DataBase::make_query($delete_lines);
-    
     }
     public static function load_chats(){
         $username = $_SESSION['user'];
