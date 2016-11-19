@@ -28,6 +28,13 @@ class ChatManager{
         $query = "INSERT INTO chats (id, name, users) VALUES ('".$this->chat_id."','".$this->chat_name."' ,'".$joined_users."')"; 
         DataBase::make_query($query);
     }
+    public function remove_chat(){
+        $query = "DELETE FROM chats WHERE id = '".$this->chat_id."'"; 
+        DataBase::make_query($query);
+        $delete_lines = "DELETE FROM chat_lines WHERE chat_id = '".$this->chat_id."'";
+        DataBase::make_query($delete_lines);
+    
+    }
     public static function load_chats(){
         $username = $_SESSION['user'];
         if(!isset($_SESSION['user'])){

@@ -22,7 +22,7 @@ $(document).ready(function(){
     });
 
 
-  $('.chat-user').submit(function(event){
+  $('.change-chat').submit(function(event){
       event.preventDefault();
        $.ajax({
           type: "POST",
@@ -38,7 +38,22 @@ $(document).ready(function(){
           }
         });
   });
-
+ 
+  $('.remove-chat').submit(function(event){
+      event.preventDefault();
+       $.ajax({
+          type: "POST",
+          url: "remove.php",
+          dataType: "json",
+          data: {removeID: $(this).attr('id')}, 
+          success: function(data) {
+              $('.users-list').html(data.list);
+          },
+          error: function() {
+            console.log("error");
+          }
+        });
+  });
   function refreshMessages(){
       $.ajax({
           type: "POST",

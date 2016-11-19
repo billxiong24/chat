@@ -194,12 +194,17 @@ $chats = ChatManager::load_chats();
                                         <?php
                                         mysqli_data_seek($chats, 0);
                                         while($row = mysqli_fetch_assoc($chats)){
-                                            echo '<form class="chat-user" '. 'id=' . $row["id"] .' method = "post" action="change.php">
+                                            echo '<div class="chat-user">
+                                                    <form class="change-chat" '. 'id=' . $row["id"] .' method = "post" action="change.php">
                                                     <img class="chat-avatar" src="img/a4.jpg" alt="" >
                                                     <div class="chat-user-name">
                                                         <input class = "btn" type="submit" name = "chatname"' .' value="'. $row["name"] .'">
                                                     </div>
-                                                </form>';
+                                                    </form>
+                                                    <form class="remove-chat" method="post" action="change.php" id='.$row["id"].'>
+                                                    <button class="small-buttons pull-right" type="submit" style="margin-top: -35px"><i class="fa fa-trash"></i></button>
+                                                    </form>
+                                                    </div>';
                                         }
                                         ?>
                                     </div>
