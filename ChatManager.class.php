@@ -14,7 +14,6 @@ class ChatManager{
     }
     public function add_chat(){ 
         //TODO real error handling
-        echo "adding chat";
         if(!isset($_SESSION['user'])){
             echo "Not logged in";
             return;
@@ -27,6 +26,14 @@ class ChatManager{
         $joined_users = join(",", $this->users);
         $query = "INSERT INTO chats (id, name, users) VALUES ('".$this->chat_id."','".$this->chat_name."' ,'".$joined_users."')"; 
         DataBase::make_query($query);
+    }
+    public function remove_chat(){
+        if(!isset($_SESSION['user'])){
+            return;
+        } 
+        $query = "DELETE FROM chats WHERE chat_id='".$this->chat_id."'";
+        DataBase::make_query($query);
+
     }
     public static function load_chats(){
         $username = $_SESSION['user'];

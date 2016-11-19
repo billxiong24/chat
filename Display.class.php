@@ -29,7 +29,7 @@ class Display{
     }
     public static function change_chat_list($chats){
         $message = "";
-        
+        mysqli_data_seek($chats, 0);
         while($row = mysqli_fetch_assoc($chats)){
             $message .='<form class="chat-user" '. 'id=' . $row["id"] .' method = "post" action="change.php">
                      <img class="chat-avatar" src="img/a4.jpg" alt="" >

@@ -21,7 +21,24 @@ $(document).ready(function(){
     });
 
 
-  $('.chat-user').submit(function(event){
+  $('.remove-chat').submit(function(event){
+    event.preventDefault();
+    $.ajax({
+        type: "POST",
+        url: 'remove.php';
+        dataType; "json",
+        success: function(data){
+            
+        }
+        error: function()[
+            console.log("error");
+        ]
+    
+    
+    }); 
+  
+  });
+  $('.change-chat').submit(function(event){
       event.preventDefault();
        $.ajax({
           type: "POST",
@@ -37,7 +54,7 @@ $(document).ready(function(){
           }
         });
   });
-  
+ 
   function refreshMessages(){
       $.ajax({
           type: "POST",
@@ -46,7 +63,8 @@ $(document).ready(function(){
           data: {test: "hello"},
           success: function(data){
               $('.chat-discussion').html(data.messages);
-              $('.users-list').html(data.chats);
+              //refreshing chat list works, but reloading all chat lists, which is not good
+              //$('.users-list').html(data.chats);
               //data.chats contains chat list
               //console.log(data.t);
               //console.log(data.messages);
