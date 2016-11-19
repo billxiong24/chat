@@ -46,6 +46,7 @@ $(document).ready(function(){
           data: {removeID: $(this).attr('id')}, 
           success: function(data) {
               $('.users-list').html(data.list);
+              window.location.replace("home.php");
           },
           error: function() {
             console.log("error");

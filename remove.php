@@ -18,7 +18,6 @@ if(isset($_SESSION['user']) && isset($_POST['removeID'])){
     $manager->remove_chat();
     $chats = ChatManager::load_chats();  
     echo json_encode(array("list"=>reload_delete($chats)));
-
 }
 function reload_delete($chats){
     mysqli_data_seek($chats, 0);
