@@ -45,7 +45,7 @@ $(document).ready(function(){
           dataType: "json",
           data: {removeID: $(this).attr('id')}, 
           success: function(data) {
-              $('.users-list').html(data.list);
+              //$('.users-list').html(data.list);
               window.location.replace("home.php");
           },
           error: function() {
