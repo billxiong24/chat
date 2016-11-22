@@ -67,7 +67,9 @@ $(document).ready(function(){
           dataType: "json",
           data: {useradd: $('.add-user-info').val()},
           success: function(data) {
-              $('.ibox-title .message-title').html(data.new_title);
+              if(!data.duplicate)
+                  $('.ibox-title .message-title').html(data.new_title);
+              $('.add-user-info').val("");
           },
           error: function() {
             console.log("error");
