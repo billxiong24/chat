@@ -2,9 +2,10 @@
 class Display{
     public static function change_title(array $curr){
         return '<small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>'
-                                .$curr["name"] . ' (' . $curr['users'] . ')<a style="margin-left: 20px">Add user</a><a style="margin-left: 20px">Leave chat</a>';
+                                .$curr["name"] . ' (' . $curr['users'] . ')';  
     }
 
+    
 
 
     //manager is an instance of ChatManager, reloads all messages

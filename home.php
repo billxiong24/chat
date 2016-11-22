@@ -31,10 +31,11 @@ $chats = ChatManager::load_chats();
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
-
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Raleway" />
     <link href="css/animate.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
     <link href="css/home.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
 
 </head>
 
@@ -46,17 +47,35 @@ $chats = ChatManager::load_chats();
 
 <div id="page-wrapper" class="gray-bg">
 <div class="row border-bottom">
-    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-        <div class="navbar-header">
+        <div class="row border-bottom white-bg">
+            <nav class="navbar navbar-static-top" role="navigation">
+                <div class="navbar-header">
+                    <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+                        <i class="fa fa-reorder"></i>
+                    </button>
+                    <a href="home.php" class="navbar-brand">ChatIO</a>
+                </div>
+       <!--  <div class="navbar-header">
             <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
             <form role="search" class="navbar-form-custom" action="search_results.html">
                 <div class="form-group">
                     <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
                 </div>
             </form>
-        </div>
+        </div> -->
         <ul class="nav navbar-top-links navbar-right">
-            <li class="dropdown">
+            <li> 
+                    <button class="btn small-buttons" style="">
+                    <?php
+                        $query = "SELECT * FROM users WHERE username='".$_SESSION['user']."'";
+                        $name = DataBase::make_query($query);
+                        $row = mysqli_fetch_assoc($name);
+                        echo $row['first'];
+                    ?>
+                    </button>
+            </li>
+
+            <li class="dropdown" style="">
                 <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                     <i class="fa fa-bell"></i>  <span class="label label-primary">8</span>
                 </a>
@@ -108,8 +127,8 @@ $chats = ChatManager::load_chats();
                 </form>
             </li>
         </ul>
-
-    </nav>
+            </nav>
+        </div>
 </div>
 <!-- <div class="row wrapper border-bottom white-bg page-heading">
     <div class="col-lg-10">
@@ -157,9 +176,15 @@ $chats = ChatManager::load_chats();
                             //stores the current chat thats open
                             $_SESSION['id'] = array($curr['id'], $curr['name'], explode(",", $curr['users']));
                             $manager = new ChatManager($curr['id'], $curr['name'], explode(",", $curr['users']));
-                            echo'<small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>'
-                            .$curr["name"] . ' (' . $curr['users'] . ')<a style="margin-left: 20px">Add user</a><a style="margin-left: 20px">Leave chat</a>';
+                            echo'<span class="message-title"><small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>'
+                            .$curr["name"] . ' (' . $curr['users'] . ')</span>';
                          ?>
+                    <div style="display: inline; ">
+                        <form class="add-user" method="post" action="adduser.php"> 
+                            <input type="text" placeholder="Add user" class="add-user-info" style="display: inline">
+                        </form>
+                        <a style="margin-left: 20px">Leave chat</a>
+                    </div>
                     </div>
                     <div class="ibox-content">
 
@@ -173,7 +198,7 @@ $chats = ChatManager::load_chats();
                                     while($row = mysqli_fetch_assoc($lines)){
                                          echo '<div class="chat-message left">
                                         <img class="message-avatar" src="img/a1.jpg" alt="" >
-                                        <div class="message">
+                                        <div class="message" id="mess">
                                             <a class="message-author" href="#">'.$row['username'].'</a>
                                             <span class="message-date"> Mon Jan 26 2015 - 18:39:23 </span>
                                             <span class="message-content">'
@@ -184,9 +209,10 @@ $chats = ChatManager::load_chats();
                                     }
                                    
                                     ?>
+                                    <div id="end-chat" style="border: solid black 1px">hello</div>
 
                                 </div>
-
+                                
                             </div>
                             <div class="col-md-3">
                                 <div class="chat-users">
@@ -225,7 +251,7 @@ $chats = ChatManager::load_chats();
                             </form>
                             <div style="text-align: center; padding-top: 20px;">
                                 <form method = "post" action="addchat.php">
-                                    <button class="btn btn-primary m-b" type = "submit" name = "add">Create new chat</button>
+                                    <button class="btn btn-primary m-b" type = "submit" name = "add" style="width: 160px">Create new chat</button>
                                 </form>
                             </div>
 

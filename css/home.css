@@ -18,6 +18,10 @@
   border-color: #424242;
   color: #FFFFFF;
 }
+.add-user{
+    display:inline; 
+    margin-left: 20px;
+}
 .small-buttons{
     margin-right: 20px;
     width: 30px;

@@ -9,6 +9,9 @@ class ChatManager{
         $this->users = $people; 
         $this->chat_name = $name;
     }
+    public function get_name(){
+        return $this->chat_name;
+    }
     public function get_users(){
         return $this->users;
     }
@@ -60,6 +63,7 @@ class ChatManager{
     
     }
     public function add_user($user){
+        //TODO error checking
         array_push($this->users, $user);
         $joined_users = join(",", $this->users);
         $query = "UPDATE chats SET users='".$joined_users."' WHERE id='".$this->chat_id."'";

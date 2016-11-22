@@ -28,24 +28,24 @@ if(isset($_SESSION['user'])){
 
     <div id="wrapper">
         <div id="page-wrapper">
-                    <div class="row border-bottom white-bg">
-        <nav class="navbar navbar-static-top" role="navigation">
-            <div class="navbar-header">
-                <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
-                    <i class="fa fa-reorder"></i>
-                </button>
-                <a href="#" class="navbar-brand">ChatIO</a>
-            </div>
-            <div class="navbar-collapse collapse" id="navbar">
-                <ul class="nav navbar-top-links navbar-right">
-                    <li>
-                        <a href="login.html" class="navbar-brand" style="font-family: Raleway; font-weight: 200;">
-                            <i class="fa fa-sign-in"></i> Log in 
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+        <div class="row border-bottom white-bg">
+            <nav class="navbar navbar-static-top" role="navigation">
+                <div class="navbar-header">
+                    <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+                        <i class="fa fa-reorder"></i>
+                    </button>
+                    <a href="#" class="navbar-brand">ChatIO</a>
+                </div>
+                <div class="navbar-collapse collapse" id="navbar">
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li>
+                            <a href="login.php" class="navbar-brand" style="font-family: Raleway; font-weight: 200;">
+                                <i class="fa fa-sign-in"></i> Log in 
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
         </div>
         <div class="wrapper wrapper-content">
          <div class="container animated fadeInDown">
