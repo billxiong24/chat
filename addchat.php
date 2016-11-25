@@ -1,8 +1,9 @@
 <?php
     session_start();
-    if(!isset($_POST['add'])){
-        header('Location: home.php');
-    }   
+
+if(!isset($_SESSION['user'])){
+    header("Location: index.php");
+}
 ?>
 <!DOCTYPE html>
 <html>

@@ -24,7 +24,15 @@ class ChatUser{
         DataBase::make_query($query);     
         return true;
     }
-    
+    public static function check_user_exists($user){
+        $check = "SELECT * FROM users WHERE username = '".$user."'";
+        $res = DataBase::make_query($check);
+        $count = 0;
+        while($row = mysqli_fetch_assoc($res)){
+            $count++;
+        }
+        return $count;
+    }    
     
 }
 ?>
