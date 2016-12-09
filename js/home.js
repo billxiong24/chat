@@ -17,7 +17,7 @@ $(document).ready(function(){
           
            var message = $('.message');
            var length = message.length;
-           $('.chat-discussion').scrollTop(5000);
+           $('.chat-discussion').scrollTop(10000);
           },
           error: function() {
           }
@@ -84,6 +84,10 @@ $(document).ready(function(){
           data: {test: "hello"},
           success: function(data){
               $('.chat-discussion').html(data.messages);
+              if(data.toScroll){
+                $('.chat-discussion').scrollTop(10000);
+              }
+              //console.log(data.lines);
               //refreshing chat list works, but reloading all chat lists, which is not good
               //$('.users-list').html(data.chats);
               //data.chats contains chat list

@@ -195,7 +195,9 @@ $chats = ChatManager::load_chats();
                                     <?php
                                     //hardcoded for now;
                                     $lines = $manager->load_chat_lines();
+                                    $line_count = 0;
                                     while($row = mysqli_fetch_assoc($lines)){
+                                         $line_count++;
                                          echo '<div class="chat-message left">
                                         <img class="message-avatar" src="img/a1.jpg" alt="" >
                                         <div class="message" id="mess">
@@ -207,7 +209,7 @@ $chats = ChatManager::load_chats();
                                         </div>
                                     </div>';
                                     }
-                                   
+                                    $_SESSION['lines'] = $line_count;
                                     ?>
                                     <div id="end-chat" style="border: solid black 1px">hello</div>
 

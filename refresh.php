@@ -18,10 +18,16 @@ if(isset($_SESSION['user'])){
    
      
 	$manager = new ChatManager($curr['id'], $curr['name'], explode(",", $curr['users']));
-	$messages = Display::change_messages($manager);
+	$message_info = Display::change_messages($manager);
+    $messages = $message_info[0];
+    $lines = $message_info[1];
     $chats = Display::change_chat_list($chat);
-    echo json_encode(array("messages"=>$messages, "chats"=>$chats));
 
+    $scroll = false;
+    if($_SESSION['lines'] < $lines)
+        $scroll = true;
+    $_SESSION['lines'] = $lines;
+    echo json_encode(array("messages"=>$messages, "chats"=>$chats, "toScroll"=>$scroll));
 }
 
 ?>

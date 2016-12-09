@@ -13,7 +13,9 @@ class Display{
     public static function change_messages($manager){
         $lines = $manager->load_chat_lines();
         $message = "";
+        $line_count = 0;
         while($row = mysqli_fetch_assoc($lines)){
+            $line_count++;
                  $message .= '<div class="chat-message left">
                 <img class="message-avatar" src="img/a1.jpg" alt="" >
                 <div class="message">
@@ -25,7 +27,7 @@ class Display{
                 </div>
             </div>';
         }
-        return $message;
+        return array($message, $line_count);
 
     }
     public static function change_chat_list($chats){
