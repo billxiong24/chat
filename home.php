@@ -67,7 +67,7 @@ $chats = ChatManager::load_chats();
             <li> 
                     <button class="btn small-buttons" style="">
                     <?php
-                        $query = "SELECT * FROM users WHERE username='".$_SESSION['user']."'";
+                        $query = "SELECT first FROM users WHERE username='".$_SESSION['user']."'";
                         $name = DataBase::make_query($query);
                         $row = mysqli_fetch_assoc($name);
                         echo $row['first'];
@@ -171,7 +171,10 @@ $chats = ChatManager::load_chats();
 
                     <div class="ibox-title">
                         <?php
-                            //hardcoded for now;
+                        /**
+                         * TODO make this look nicer, store current chat in less ratchet way
+                         *
+                         */
                             $curr = mysqli_fetch_assoc($chats);
                             //stores the current chat thats open
                             $_SESSION['id'] = array($curr['id'], $curr['name'], explode(",", $curr['users']));
@@ -183,7 +186,9 @@ $chats = ChatManager::load_chats();
                         <form class="add-user" method="post" action="adduser.php"> 
                             <input type="text" placeholder="Add user" class="add-user-info" style="display: inline">
                         </form>
-                        <a style="margin-left: 20px">Leave chat</a>
+                        <form method="post" action="">
+                            <button class="btn btn-primary">Leave chat</button>
+                        </form>
                     </div>
                     </div>
                     <div class="ibox-content">
@@ -193,25 +198,29 @@ $chats = ChatManager::load_chats();
                             <div class="col-md-9 ">
                                 <div class="chat-discussion">
                                     <?php
-                                    //hardcoded for now;
-                                    $lines = $manager->load_chat_lines();
-                                    $line_count = 0;
-                                    while($row = mysqli_fetch_assoc($lines)){
-                                         $line_count++;
-                                         echo '<div class="chat-message left">
-                                        <img class="message-avatar" src="img/a1.jpg" alt="" >
-                                        <div class="message" id="mess">
-                                            <a class="message-author" href="#">'.$row['username'].'</a>
-                                            <span class="message-date"> Mon Jan 26 2015 - 18:39:23 </span>
-                                            <span class="message-content">'
-                                            . $row['text'] .
-                                            '</span>
-                                        </div>
-                                    </div>';
-                                    }
-                                    $_SESSION['lines'] = $line_count;
+                                        //hardcoded for now;
+                                        $lines = $manager->load_chat_lines();
+                                        $line_count = 0;
+                                        $last_message_id;
+                                        while($row = mysqli_fetch_assoc($lines)){
+                                             
+                                             $last_message_id = $row['line_id'];
+                                             $line_count++;
+                                             echo '<div class="chat-message left">
+                                            <img class="message-avatar" src="img/a1.jpg" alt="" >
+                                            <div class="message" id="mess">
+                                                <a class="message-author" href="#">'.$row['username'].'</a>
+                                                <span class="message-date"> Mon Jan 26 2015 - 18:39:23 </span>
+                                                <span class="message-content">'
+                                                . $row['text'].
+                                                '</span>
+                                            </div>
+                                        </div>';
+                                        }
+                                        $_SESSION['lines'] = $line_count;
+                                        $_SESSION['last_message_id'] = $last_message_id;
                                     ?>
-                                    <div id="end-chat" style="border: solid black 1px">hello</div>
+                                    <div id="end-chat" style="border: solid black 1px"></div>
 
                                 </div>
                                 

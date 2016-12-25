@@ -83,10 +83,11 @@ $(document).ready(function(){
           dataType: "json",
           data: {test: "hello"},
           success: function(data){
-              $('.chat-discussion').html(data.messages);
-              if(data.toScroll){
-                $('.chat-discussion').scrollTop(10000);
+              if(data.change){
+                  $('.chat-discussion').html(data.messages);
+                  $('.chat-discussion').scrollTop(10000);
               }
+
               //console.log(data.lines);
               //refreshing chat list works, but reloading all chat lists, which is not good
               //$('.users-list').html(data.chats);

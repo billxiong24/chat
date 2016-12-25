@@ -8,26 +8,27 @@ session_start();
 if(isset($_SESSION['user'])){
     DataBase::init();
     //TODO make session variable to store current chat id
-    $curr_chat = $_SESSION['id'][0];
-    $chat = ChatManager::load_chats();
-    $curr = "";
-    while($curr = mysqli_fetch_assoc($chat)){
-        if($curr['id'] == $curr_chat)
-            break;
-    }
-   
+    
      
-	$manager = new ChatManager($curr['id'], $curr['name'], explode(",", $curr['users']));
-	$message_info = Display::change_messages($manager);
-    $messages = $message_info[0];
-    $lines = $message_info[1];
-    $chats = Display::change_chat_list($chat);
+	$manager = new ChatManager($_SESSION['id'][0], $_SESSION['id'][1], explode(",", $_SESSION['id'][2]));
 
-    $scroll = false;
-    if($_SESSION['lines'] < $lines)
-        $scroll = true;
-    $_SESSION['lines'] = $lines;
-    echo json_encode(array("messages"=>$messages, "chats"=>$chats, "toScroll"=>$scroll));
+    $last_id = $manager->load_last_id(); 
+    if($_SESSION['last_message_id'] != $last_id){
+        $_SESSION['last_message_id'] = $last_id;
+
+        $message_info = Display::change_messages($manager);
+        $messages = $message_info[0];
+        $lines = $message_info[1];
+        $chats = Display::change_chat_list($chat);
+
+        $_SESSION['lines'] = $lines;
+        $change = true;
+        echo json_encode(array("lastid"=>$last_id, "change"=>true, "messages"=>$messages, "chats"=>$chats));
+    }
+    else{
+        echo json_encode(array("change"=>false));
+    }
+    
 }
 
 ?>

@@ -45,6 +45,22 @@ class ChatManager{
         $query = "SELECT * FROM chats WHERE users LIKE '%{$username}%'"; 
         return DataBase::make_query($query);
     }
+    public function load_last_id(){
+        $username = $_SESSION['user'];
+        if(!isset($_SESSION['user'])){
+            return;
+        }         
+         
+        //$query = "SELECT LAST FROM chat_lines WHERE chat_id = '".$this->chat_id."'";
+        $query1 = "SELECT @last_id := MAX(line_id) FROM chat_lines WHERE chat_id = '".$this->chat_id."'";
+        DataBase::make_query($query1);
+        
+        
+        $query2 = "SELECT line_id FROM chat_lines WHERE line_id = @last_id"; 
+        $result = DataBase::make_query($query2);
+        $row = mysqli_fetch_assoc($result);
+        return $row['line_id'];
+    }
     public function load_chat_lines(){
         $query = "SELECT * FROM chat_lines WHERE chat_id = '".$this->chat_id."'";
         return DataBase::make_query($query);
