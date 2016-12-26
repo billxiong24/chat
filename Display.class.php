@@ -4,7 +4,19 @@ class Display{
         return '<small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>'
                                 .$curr["name"] . ' (' . $curr['users'] . ')';  
     }
+    private static function get_message($user, $message){
 
+        return '<div class="chat-message left">
+                <img class="message-avatar" src="img/a1.jpg" alt="" >
+                <div class="message">
+                    <a class="message-author" href="#">'.$user .'</a>
+                    <span class="message-date"> Mon Jan 26 2015 - 18:39:23 </span>
+                    <span class="message-content">'
+                    . $message .
+                    '</span>
+                </div>
+            </div>';
+    }
     
 
 
@@ -16,19 +28,13 @@ class Display{
         $line_count = 0;
         while($row = mysqli_fetch_assoc($lines)){
             $line_count++;
-                 $message .= '<div class="chat-message left">
-                <img class="message-avatar" src="img/a1.jpg" alt="" >
-                <div class="message">
-                    <a class="message-author" href="#">'.$row['username'].'</a>
-                    <span class="message-date"> Mon Jan 26 2015 - 18:39:23 </span>
-                    <span class="message-content">'
-                    . $row['text'] .
-                    '</span>
-                </div>
-            </div>';
+            $message .= Display::get_message($row['username'], $row['text']);
         }
         return array($message, $line_count);
 
+    }
+    public static function display_latest_message($user, $text){
+        return Display::get_message($user, $text);
     }
     public static function change_chat_list($chats){
         $message = "";

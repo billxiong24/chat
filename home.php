@@ -177,6 +177,7 @@ $chats = ChatManager::load_chats();
                          */
                             $curr = mysqli_fetch_assoc($chats);
                             //stores the current chat thats open
+                            $_SESSION['last_chat_id'] = $curr['id'];
                             $_SESSION['id'] = array($curr['id'], $curr['name'], explode(",", $curr['users']));
                             $manager = new ChatManager($curr['id'], $curr['name'], explode(",", $curr['users']));
                             echo'<span class="message-title"><small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>'
@@ -217,10 +218,9 @@ $chats = ChatManager::load_chats();
                                             </div>
                                         </div>';
                                         }
-                                        $_SESSION['lines'] = $line_count;
                                         $_SESSION['last_message_id'] = $last_message_id;
                                     ?>
-                                    <div id="end-chat" style="border: solid black 1px"></div>
+                                    <div id="end-chat"></div>
 
                                 </div>
                                 
@@ -255,7 +255,7 @@ $chats = ChatManager::load_chats();
                             <div class="col-lg-9">
                                 <div class="chat-message-form">
                                     <div class="form-group">
-                                        <input class="form-control message-input" name="message" placeholder="Enter message text" autocomplete="off">
+                                        <input class="form-control message-input" name="message" placeholder="Enter message" autocomplete="off">
                                     </div>
                                 </div>
                             </div>

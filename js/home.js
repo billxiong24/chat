@@ -13,11 +13,8 @@ $(document).ready(function(){
           data: {text: $('.message-input').val()},
           success: function(data) {
             $('.message-input').val("");
-            $('.chat-discussion').append('<div class="chat-message left"><img class="message-avatar" src="img/a1.jpg" alt="" ><div class="message"><a class="message-author" href="#">' + data.user + '</a><span class="message-date"> Mon Jan 26 2015 - 18:39:23 </span><span class="message-content">' + data.message + '</span></div></div>');
           
-           var message = $('.message');
-           var length = message.length;
-           $('.chat-discussion').scrollTop(10000);
+            $('.chat-discussion').scrollTop(10000);
           },
           error: function() {
           }
@@ -84,16 +81,10 @@ $(document).ready(function(){
           data: {test: "hello"},
           success: function(data){
               if(data.change){
-                  $('.chat-discussion').html(data.messages);
-                  $('.chat-discussion').scrollTop(10000);
+                  var chat = $('.chat-discussion');
+                  chat.append(data.messages);
+                  chat.scrollTop(10000);
               }
-
-              //console.log(data.lines);
-              //refreshing chat list works, but reloading all chat lists, which is not good
-              //$('.users-list').html(data.chats);
-              //data.chats contains chat list
-              //console.log(data.t);
-              //console.log(data.messages);
           },
           error: function(){
               console.log("error");

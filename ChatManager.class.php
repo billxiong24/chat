@@ -4,10 +4,14 @@ class ChatManager{
     private $chat_id;
     private $chat_name;
     private $users;
+
     public function __construct($id, $name = "Chat", $people = array()){
         $this->chat_id = $id;
         $this->users = $people; 
         $this->chat_name = $name;
+    }
+    public function get_id(){
+        return $this->chat_id;
     }
     public function get_name(){
         return $this->chat_name;
@@ -17,7 +21,6 @@ class ChatManager{
     }
     public function add_chat(){ 
         //TODO real error handling
-        echo "adding chat";
         if(!isset($_SESSION['user'])){
             echo "Not logged in";
             return;
@@ -38,11 +41,12 @@ class ChatManager{
         DataBase::make_query($delete_lines);
     }
     public static function load_chats(){
-        $username = $_SESSION['user'];
         if(!isset($_SESSION['user'])){
             return;
         }         
-        $query = "SELECT * FROM chats WHERE users LIKE '%{$username}%'"; 
+        $username = $_SESSION['user'];
+
+        $query = "SELECT * FROM chats WHERE users LIKE '%{$username}%' ORDER BY date DESC"; 
         return DataBase::make_query($query);
     }
     public function load_last_id(){
@@ -56,12 +60,22 @@ class ChatManager{
         DataBase::make_query($query1);
         
         
-        $query2 = "SELECT line_id FROM chat_lines WHERE line_id = @last_id"; 
+        $query2 = "SELECT * FROM chat_lines WHERE line_id = @last_id"; 
         $result = DataBase::make_query($query2);
         $row = mysqli_fetch_assoc($result);
-        return $row['line_id'];
+        return $row;
+    }
+    public function update_timestamp(){
+        if(!isset($_SESSION['user'])){
+            return;
+        }         
+        $query = "UPDATE chats SET date=now() WHERE id='".$this->chat_id."'";
+        DataBase::make_query($query);
     }
     public function load_chat_lines(){
+        if(!isset($_SESSION['user'])){
+            return;
+        }         
         $query = "SELECT * FROM chat_lines WHERE chat_id = '".$this->chat_id."'";
         return DataBase::make_query($query);
     }

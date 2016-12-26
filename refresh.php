@@ -13,22 +13,18 @@ if(isset($_SESSION['user'])){
 	$manager = new ChatManager($_SESSION['id'][0], $_SESSION['id'][1], explode(",", $_SESSION['id'][2]));
 
     $last_id = $manager->load_last_id(); 
-    if($_SESSION['last_message_id'] != $last_id){
-        $_SESSION['last_message_id'] = $last_id;
+    if($_SESSION['last_message_id'] != $last_id['line_id']){
+        $_SESSION['last_message_id'] = $last_id['line_id'];
+        $manager->update_timestamp();  
 
-        $message_info = Display::change_messages($manager);
-        $messages = $message_info[0];
-        $lines = $message_info[1];
+        $messages = Display::display_latest_message($last_id['username'], $last_id['text']);
         $chats = Display::change_chat_list($chat);
-
-        $_SESSION['lines'] = $lines;
-        $change = true;
-        echo json_encode(array("lastid"=>$last_id, "change"=>true, "messages"=>$messages, "chats"=>$chats));
+        
+        echo json_encode(array("change"=>true, "messages"=>$messages, "chats"=>$chats));
     }
     else{
         echo json_encode(array("change"=>false));
     }
-    
 }
 
 ?>
