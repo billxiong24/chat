@@ -27,5 +27,11 @@
     width: 30px;
     background-color: transparent;
     border: none;
+}
 
+.notif{
+    text-align: center;
+    display: inline-block;
+    width: 20px;
+    /*background-color: darkred;*/
 }

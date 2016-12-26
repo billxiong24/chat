@@ -64,7 +64,8 @@ $(document).ready(function(){
           dataType: "json",
           data: {useradd: $('.add-user-info').val()},
           success: function(data) {
-              if(!data.duplicate)
+              console.log(data.duplicate);
+              if(data.duplicate)
                   $('.ibox-title .message-title').html(data.new_title);
               $('.add-user-info').val("");
           },

@@ -16,6 +16,8 @@ if(isset($_SESSION['user']) && isset($_POST['chatID'])){
 	}
 	$manager = new ChatManager($curr['id'], $curr['name'], explode(",", $curr['users']));
 
+    unset($_SESSION['manager']);
+    $_SESSION['manager'] = $manager;
     //need to update last message id since we switched a chat
     $_SESSION['last_message_id'] = $manager->load_last_id()['line_id']; 
 	$title = Display::change_title($curr);

@@ -1,5 +1,6 @@
 <?php
 include 'ChatManager.class.php';
+include 'Notification.class.php';
 include 'DataBase.class.php';
 include 'ChatLine.class.php';
 include 'ChatUser.class.php';
@@ -180,6 +181,7 @@ $chats = ChatManager::load_chats();
                             $_SESSION['last_chat_id'] = $curr['id'];
                             $_SESSION['id'] = array($curr['id'], $curr['name'], explode(",", $curr['users']));
                             $manager = new ChatManager($curr['id'], $curr['name'], explode(",", $curr['users']));
+                            $_SESSION['manager'] = $manager;
                             echo'<span class="message-title"><small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>'
                             .$curr["name"] . ' (' . $curr['users'] . ')</span>';
                          ?>
@@ -229,13 +231,17 @@ $chats = ChatManager::load_chats();
                                 <div class="chat-users">
                                     <div class="users-list">
                                         <?php
+                                        $_SESSION['chat_ids'] = array();
                                         mysqli_data_seek($chats, 0);
+                                        $notifs = '<div class="label-warning notif">4</div>'; 
                                         while($row = mysqli_fetch_assoc($chats)){
+                                            array_push($_SESSION['chat_ids'], $row['id']);
                                             echo '<div class="chat-user">
                                                     <form class="change-chat" '. 'id=' . $row["id"] .' method = "post" action="change.php">
                                                     <img class="chat-avatar" src="img/a4.jpg" alt="" >
                                                     <div class="chat-user-name">
                                                         <input class = "btn" type="submit" name = "chatname"' .' value="'. $row["name"] .'">
+                                                        '.$notifs.'
                                                     </div>
                                                     </form>
                                                     <form class="remove-chat" method="post" action="remove.php" id='.$row["id"].'>
@@ -243,6 +249,10 @@ $chats = ChatManager::load_chats();
                                                     </form>
                                                     </div>';
                                         }
+
+
+                                        $notif_obj = new Notification($_SESSION['chat_ids']);
+                                        $_SESSION['notifs'] = $notif_obj;
                                         ?>
                                     </div>
 

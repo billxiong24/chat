@@ -1,5 +1,6 @@
 <?php
 include 'ChatManager.class.php';
+include 'Notification.class.php';
 include 'DataBase.class.php';
 include 'ChatLine.class.php';
 include 'ChatUser.class.php';
@@ -7,9 +8,8 @@ include 'Display.class.php';
 session_start();
 if(isset($_SESSION['user'])){
     DataBase::init();
-    //TODO make session variable to store current chat id
+    $notif_manager = $_SESSION['notifs'];
     
-     
 	$manager = new ChatManager($_SESSION['id'][0], $_SESSION['id'][1], explode(",", $_SESSION['id'][2]));
 
     $last_id = $manager->load_last_id(); 
@@ -23,7 +23,7 @@ if(isset($_SESSION['user'])){
         echo json_encode(array("change"=>true, "messages"=>$messages, "chats"=>$chats));
     }
     else{
-        echo json_encode(array("change"=>false));
+        echo json_encode(array("testarr"=>$nums, "change"=>false));
     }
 }
 
