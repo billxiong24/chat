@@ -82,6 +82,7 @@ $(document).ready(function(){
           data: {test: "hello"},
           success: function(data){
               if(data.change){
+                  console.log(data.nums);
                   var chat = $('.chat-discussion');
                   chat.append(data.messages);
                   chat.scrollTop(10000);

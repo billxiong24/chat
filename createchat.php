@@ -25,11 +25,24 @@ include 'ChatUser.class.php';
         if(ChatUser::check_user_exists($_POST['user'])){
             $chat = new ChatManager($numbers[0], $_POST['chatname'], array($_SESSION['user'], $_POST['user']));
             $chat->add_chat();
+
+            $user1 = new ChatUser(null, null, $_SESSION['user'], null);
+            init_notifs($user1);
+
+            $user2 = new ChatUser(null, null, $_POST['user'], null);
+            init_notifs($user2);
+
             return true;
         }
         else{
             //TODO real error checking
             return false;
         }
+    }
+
+    function init_notifs($users){
+        //$notifs = $users->fetch_notifications();
+        //array_push($notifs, 0);
+        //$users->update_notifications($notifs);
     }
 ?>

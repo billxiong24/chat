@@ -10,20 +10,21 @@ if(isset($_SESSION['user'])){
     DataBase::init();
     $notif_manager = $_SESSION['notifs'];
     
-	$manager = new ChatManager($_SESSION['id'][0], $_SESSION['id'][1], explode(",", $_SESSION['id'][2]));
+	$manager = $_SESSION['manager'];
 
     $last_id = $manager->load_last_id(); 
     if($_SESSION['last_message_id'] != $last_id['line_id']){
         $_SESSION['last_message_id'] = $last_id['line_id'];
         $manager->update_timestamp();  
 
+        $num_messages = $notif_manager->get_num_new_messages();
         $messages = Display::display_latest_message($last_id['username'], $last_id['text']);
         $chats = Display::change_chat_list($chat);
         
-        echo json_encode(array("change"=>true, "messages"=>$messages, "chats"=>$chats));
+        echo json_encode(array("change"=>true, "messages"=>$messages, "chats"=>$chats, "nums"=>$num_messages));
     }
     else{
-        echo json_encode(array("testarr"=>$nums, "change"=>false));
+        echo json_encode(array("change"=>false));
     }
 }
 

@@ -99,6 +99,7 @@ class ChatManager{
         $query = "UPDATE chats SET users='".$joined_users."' WHERE id='".$this->chat_id."'";
         DataBase::make_query($query);
     } 
+
     private function check_duplicate_chats(){
         $query = "SELECT * FROM chats WHERE id = '".$this->chat_id."'";
         $res = DataBase::make_query($query);

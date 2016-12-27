@@ -7,9 +7,6 @@ include 'ChatLine.class.php';
 session_start();
 if(isset($_SESSION['user']) && isset($_POST['useradd'])){
     DataBase::init();
-    $chat_id = $_SESSION['id'][0]; 
-    $name = $_SESSION['id'][1];
-    $people = $_SESSION['id'][2]; 
     
     $manager = $_SESSION['manager'];
 
@@ -21,7 +18,7 @@ if(isset($_SESSION['user']) && isset($_POST['useradd'])){
 
     if(strpos(join(",", $people), $_POST['useradd']) == false){
         $joined = true;               
-
+        
         if(ChatUser::check_user_exists($_POST['useradd']))
             $manager->add_user($_POST['useradd']);
         else

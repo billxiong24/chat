@@ -29,7 +29,8 @@ class Notification{
         $last_id = $manager->load_last_id()['line_id'];
         $this->last_ids[$chat_id] = $last_id;
     }
-
+    
+       
     public function add_chat($chat_id){
         array_push($_SESSION['chat_ids'], $chat_id);
         array_push($this->chats, $chat_id);

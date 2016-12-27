@@ -50,5 +50,9 @@ class Display{
         return $message;    
     }
 
+    public static function display_notifications($notif_manager){
+
+    }
+
 }
 ?>

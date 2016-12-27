@@ -4,10 +4,10 @@ include 'DataBase.class.php';
 include 'ChatLine.class.php';
 include 'ChatUser.class.php';
 	session_start();
-	if(isset($_POST['text']) && isset($_SESSION['user']) && isset($_SESSION['id'])){
+	if(isset($_POST['text']) && isset($_SESSION['user']) && isset($_SESSION['manager'])){
 		DataBase::init();
 		echo json_encode(array("user"=>$_SESSION['user'], "message"=>$_POST['text']));
-		$manager = new ChatManager($_SESSION['id'][0], $_SESSION['id'][1], $_SESSION['id'][2]);
+		$manager = $_SESSION['manager'];
 		$manager->submit_chat($_POST['text']);
 	}
 	else{

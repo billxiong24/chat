@@ -179,7 +179,6 @@ $chats = ChatManager::load_chats();
                             $curr = mysqli_fetch_assoc($chats);
                             //stores the current chat thats open
                             $_SESSION['last_chat_id'] = $curr['id'];
-                            $_SESSION['id'] = array($curr['id'], $curr['name'], explode(",", $curr['users']));
                             $manager = new ChatManager($curr['id'], $curr['name'], explode(",", $curr['users']));
                             $_SESSION['manager'] = $manager;
                             echo'<span class="message-title"><small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>'
