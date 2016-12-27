@@ -1,8 +1,8 @@
 <?php
 class Display{
-    public static function change_title(array $curr){
+    public static function change_title($manager){
         return '<small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>'
-                                .$curr["name"] . ' (' . $curr['users'] . ')';  
+            .$manager->get_name() . ' (' . join(",", $manager->get_users()). ')';  
     }
     private static function get_message($user, $message){
 
@@ -50,6 +50,24 @@ class Display{
         return $message;    
     }
 
+    public static function reload_delete($chats){
+        mysqli_data_seek($chats, 0);
+        $html = "";
+        while($row = mysqli_fetch_assoc($chats)){
+            $html .= '<div class="chat-user">
+                    <form class="change-chat" '. 'id=' . $row["id"] .' method = "post" action="change.php">
+                    <img class="chat-avatar" src="img/a4.jpg" alt="" >
+                    <div class="chat-user-name">
+                        <input class = "btn" type="submit" name = "chatname"' .' value="'. $row["name"] .'">
+                    </div>
+                    </form>
+                    <form class="remove-chat" method="post" action="remove.php" id='.$row["id"].'>
+                    <button class="small-buttons pull-right" type="submit" style="margin-top: -35px"><i class="fa fa-trash"></i></button>
+                    </form>
+                    </div>';
+        }
+        return $html;
+    }
     public static function display_notifications($notif_manager){
 
     }

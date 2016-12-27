@@ -5,6 +5,7 @@ include 'DataBase.class.php';
 include 'Display.class.php';
 include 'ChatLine.class.php';
 session_start();
+//TODO change works now
 if(isset($_SESSION['user']) && isset($_POST['useradd'])){
     DataBase::init();
     
@@ -16,7 +17,7 @@ if(isset($_SESSION['user']) && isset($_POST['useradd'])){
     
     $joined = false; 
 
-    if(strpos(join(",", $people), $_POST['useradd']) == false){
+    if(strpos(join(" ", $people), $_POST['useradd']) == false && $_POST['useradd'] !== $_SESSION['user']){
         $joined = true;               
         
         if(ChatUser::check_user_exists($_POST['useradd']))
@@ -25,7 +26,7 @@ if(isset($_SESSION['user']) && isset($_POST['useradd'])){
             $joined = false;
 
         $arr = array("name"=>$name, "users"=>join(",", $manager->get_users()));
-        $new_title = Display::change_title($arr); 
+        $new_title = Display::change_title($manager); 
         echo json_encode(array("duplicate"=> $joined, "new_title"=>$new_title));
     }
     else{

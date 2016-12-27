@@ -5,23 +5,20 @@ include 'ChatLine.class.php';
 include 'ChatUser.class.php';
 include 'Display.class.php';
 session_start();
+//supposedly works now
+
 if(isset($_SESSION['user']) && isset($_POST['chatID'])){
 	DataBase::init();
 	//TODO make more efficient
-	$chat = ChatManager::load_chats();
-	$curr = "";
-	while($curr = mysqli_fetch_assoc($chat)){
-		if($curr['id'] == $_POST['chatID'])
-			break;
-	}
-	$manager = new ChatManager($curr['id'], $curr['name'], explode(",", $curr['users']));
+    $curr = ChatManager::load_chat_id($_POST['chatID']);
+	$manager = new ChatManager($curr['id'], $curr['name'], ChatManager::load_chat_users($curr['id']));
 
     unset($_SESSION['manager']);
     $_SESSION['manager'] = $manager;
 
     //need to update last message id since we switched a chat
     $_SESSION['last_message_id'] = $manager->load_last_id()['line_id']; 
-	$title = Display::change_title($curr);
+	$title = Display::change_title($manager);
 
     /**
      * TODO find a way to cache the messages so we don't 

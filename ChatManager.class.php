@@ -30,15 +30,32 @@ class ChatManager{
             echo "duplicate chats";
             return;
         }
-        $joined_users = join(",", $this->users);
-        $query = "INSERT INTO chats (id, name, users) VALUES ('".$this->chat_id."','".$this->chat_name."' ,'".$joined_users."')"; 
+        
+        $query = "INSERT INTO chats (id) VALUES ('".$this->chat_id."')"; 
         DataBase::make_query($query);
+
+        foreach($this->users as $user){
+            $query2 = "INSERT INTO chat_updates (id, name, users) VALUES ('".$this->chat_id."', '".$this->chat_name."', '".$user."')";
+            DataBase::make_query($query2);
+        }
+    }
+    public static function load_chat_id($chat_id){
+        $user = $_SESSION['user'];
+        if(!isset($user)){
+            return;
+        }
+        $query = "SELECT * FROM chat_updates WHERE users = '".$user."' AND id = '".$chat_id."'";
+        $result = DataBase::make_query($query);
+        return mysqli_fetch_assoc($result);
     }
     public function remove_chat(){
         $query = "DELETE FROM chats WHERE id = '".$this->chat_id."'"; 
         DataBase::make_query($query);
         $delete_lines = "DELETE FROM chat_lines WHERE chat_id = '".$this->chat_id."'";
         DataBase::make_query($delete_lines);
+
+        $delete_updates = "DELETE FROM chat_updates WHERE id = '".$this->chat_id."'";
+        DataBase::make_query($delete_updates);
     }
     public static function load_chats(){
         if(!isset($_SESSION['user'])){
@@ -46,8 +63,18 @@ class ChatManager{
         }         
         $username = $_SESSION['user'];
 
-        $query = "SELECT * FROM chats WHERE users LIKE '%{$username}%' ORDER BY date DESC"; 
+        $query = "SELECT * FROM chat_updates WHERE users LIKE '%{$username}%' ORDER BY date DESC"; 
         return DataBase::make_query($query);
+    }
+    public static function load_chat_users($chat_id){
+        $names = "SELECT users FROM chat_updates WHERE id = '".$chat_id."'";
+        $name_results = DataBase::make_query($names);
+        $users = array();
+        while($row = mysqli_fetch_assoc($name_results)){
+            array_push($users, $row['users']);
+        }
+        return $users;
+            
     }
     public function load_last_id(){
         $username = $_SESSION['user'];
@@ -69,7 +96,7 @@ class ChatManager{
         if(!isset($_SESSION['user'])){
             return;
         }         
-        $query = "UPDATE chats SET date=now() WHERE id='".$this->chat_id."'";
+        $query = "UPDATE chats SET timestamp=now() WHERE id='".$this->chat_id."'";
         DataBase::make_query($query);
     }
     public function load_chat_lines(){
@@ -95,8 +122,7 @@ class ChatManager{
     public function add_user($user){
         //TODO error checking
         array_push($this->users, $user);
-        $joined_users = join(",", $this->users);
-        $query = "UPDATE chats SET users='".$joined_users."' WHERE id='".$this->chat_id."'";
+        $query = "INSERT INTO chat_updates (id, users, name) VALUES ('".$this->chat_id."', '".$user."', '".$this->chat_name."')"; 
         DataBase::make_query($query);
     } 
 

@@ -174,15 +174,18 @@ $chats = ChatManager::load_chats();
                         <?php
                         /**
                          * TODO make this look nicer, store current chat in less ratchet way
+                         * put this somewhere else other than main
                          *
                          */
                             $curr = mysqli_fetch_assoc($chats);
                             //stores the current chat thats open
                             $_SESSION['last_chat_id'] = $curr['id'];
-                            $manager = new ChatManager($curr['id'], $curr['name'], explode(",", $curr['users']));
+                            $users = ChatManager::load_chat_users($curr['id']);
+                            $manager = new ChatManager($curr['id'], $curr['name'], $users);
+
                             $_SESSION['manager'] = $manager;
                             echo'<span class="message-title"><small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>'
-                            .$curr["name"] . ' (' . $curr['users'] . ')</span>';
+                            .$curr["name"] . ' (' . join(",", $users). ')</span>';
                          ?>
                     <div style="display: inline; ">
                         <form class="add-user" method="post" action="adduser.php"> 

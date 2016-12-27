@@ -21,7 +21,7 @@ if(isset($_SESSION['user'])){
         $messages = Display::display_latest_message($last_id['username'], $last_id['text']);
         $chats = Display::change_chat_list($chat);
         
-        echo json_encode(array("change"=>true, "messages"=>$messages, "chats"=>$chats, "nums"=>$num_messages));
+        echo json_encode(array("change"=>true, "messages"=>$messages, "chats"=>$chats));
     }
     else{
         echo json_encode(array("change"=>false));
