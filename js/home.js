@@ -2,7 +2,8 @@ $(document).ready(function(){
      
     $('.chat-discussion').animate({ scrollTop: $('#end-chat').position().top }, 'fast');
     refresh = setInterval(function(){
-       refreshMessages();
+        refreshMessages();
+        refreshNotifications();
     }, 100);
     $('.submit-message').submit(function(event){
         event.preventDefault();
@@ -15,9 +16,10 @@ $(document).ready(function(){
               if(data.deleted){
                   window.location.replace("home.php");
               }
-            $('.message-input').val("");
-            //$('.chat-discussion').append();
-            $('.chat-discussion').scrollTop(10000);
+              $('.message-input').val("");
+              //$('.chat-discussion').append();
+              $('.chat-discussion').scrollTop(10000);
+              incrementNotifications();
           },
           error: function() {
               console.log("Wat");
@@ -37,7 +39,7 @@ $(document).ready(function(){
           success: function(data) {
               $('.ibox-title .message-title').html(data.title);
               $('.chat-discussion').html(data.messages);
-              $('.chat-discussion').scrollTop(5000);
+              $('.chat-discussion').scrollTop(10000);
           },
           error: function() {
             console.log("error");
@@ -85,7 +87,10 @@ $(document).ready(function(){
           dataType: "json",
           data: {test: "hello"},
           success: function(data){
-              if(data.change){
+              if(!data.logged_in){
+                  window.location.replace("index.php");
+              }
+              else if(data.change){
                   var chat = $('.chat-discussion');
                   chat.append(data.messages);
                   chat.scrollTop(10000);
@@ -95,6 +100,36 @@ $(document).ready(function(){
               console.log("error");
           }
       });
+  }
+  function incrementNotifications(){
+      /*$.ajax({
+          type: "POST",
+          url: 'incrementNotif.php',
+          dataType: "json",
+          data: {test: "hello"},
+          success: function(data){
+                
+          },
+          error: function(){
+              console.log("error");
+          }
+      });*/
+      
+  }
+
+  function refreshNotifications(){
+      $.ajax({
+          type: "POST",
+          url: 'refreshNotifications.php',
+          dataType: "json",
+          data: {test: "hello"},
+          success: function(data){
+          },
+          error: function(){
+              console.log("error");
+          }
+      });
+
   }
   
 });

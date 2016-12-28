@@ -68,8 +68,12 @@ class Display{
         }
         return $html;
     }
-    public static function display_notifications($notif_manager){
-
+    public static function display_notifications(array $notifications){
+        $notif_arr = array();
+        foreach($notifications as $value){
+            array_push($notif_arr, '<div class="label-warning notif">'.$value.'</div>'); 
+        }
+        return $notif_arr;     
     }
 
 }

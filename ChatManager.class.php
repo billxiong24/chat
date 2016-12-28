@@ -71,7 +71,6 @@ class ChatManager{
         if(!isset($_SESSION['user'])){
             return;
         }         
-        $username = $_SESSION['user'];
 
         $query = "SELECT * FROM chat_updates AS up JOIN chats AS ch on up.id = ch.id WHERE users = '".$_SESSION['user']."' ORDER by ch.timestamp DESC";
         return DataBase::make_query($query);
