@@ -1,5 +1,5 @@
 <?php
-
+'include ChatManager.class.php';
 class Notification{
     
     private $manager;
@@ -11,15 +11,21 @@ class Notification{
         DataBase::init();
         $this->manager= $manager; 
     }
+    public function set_manager($new_manager){
+        $this->manager = $new_manager;
+    }
+
     public function increment_notifications(){
         //TODO error?
         if(!isset($_SESSION['user'])){
             return;
         }
-        $curr_id = $this->manager->get_id();
+        $man = $this->manager;
+        $curr_id = $man->get_id();
         //TODO fix possible sql injection
         $query = "UPDATE chat_updates SET notifications = notifications + 1 WHERE id = '".$curr_id."' AND users <> '".$_SESSION['user']."'";
         DataBase::make_query($query);
+        return $man;
     }
     public function retrieve_notifications(){
         if(!isset($_SESSION['user'])){

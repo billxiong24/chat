@@ -10,6 +10,7 @@ include 'ChatUser.class.php';
 		$manager = $_SESSION['manager'];
         
         //$test = $manager->chat_exists();
+        //TODO inefficient, find a better way?
         if($manager->chat_exists()){
 		    echo json_encode(array("deleted"=>false));
 		    $manager->submit_chat($_POST['text']);

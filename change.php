@@ -1,5 +1,6 @@
 <?php
 include 'ChatManager.class.php';
+include 'Notification.class.php';
 include 'DataBase.class.php';
 include 'ChatLine.class.php';
 include 'ChatUser.class.php';
@@ -16,7 +17,7 @@ if(isset($_SESSION['user']) && isset($_POST['chatID'])){
     $_SESSION['last_chat_id'] = $curr['id'];
     unset($_SESSION['manager']);
     $_SESSION['manager'] = $manager;
-
+    $_SESSION['notifs']->set_manager($manager);
     //need to update last message id since we switched a chat
     $_SESSION['last_message_id'] = $manager->load_last_id()['line_id']; 
 	$title = Display::change_title($manager);
@@ -28,8 +29,5 @@ if(isset($_SESSION['user']) && isset($_POST['chatID'])){
 	$messages = Display::change_messages($manager);
 	echo json_encode(array("title"=>$title, "messages"=>$messages[0]));
 }
-
-
-
 
 ?>

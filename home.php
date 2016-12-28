@@ -253,7 +253,7 @@ $chats = ChatManager::load_chats();
                                         }
 
 
-                                        $notif_obj = new Notification($_SESSION['chat_ids']);
+                                        $notif_obj = new Notification($manager);
                                         $_SESSION['notifs'] = $notif_obj;
                                         ?>
                                     </div>

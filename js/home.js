@@ -1,5 +1,6 @@
 $(document).ready(function(){
      
+    var height = 100000;
     $('.chat-discussion').animate({ scrollTop: $('#end-chat').position().top }, 'fast');
     refresh = setInterval(function(){
         refreshMessages();
@@ -18,7 +19,7 @@ $(document).ready(function(){
               }
               $('.message-input').val("");
               //$('.chat-discussion').append();
-              $('.chat-discussion').scrollTop(10000);
+              $('.chat-discussion').scrollTop(height);
               incrementNotifications();
           },
           error: function() {
@@ -39,7 +40,7 @@ $(document).ready(function(){
           success: function(data) {
               $('.ibox-title .message-title').html(data.title);
               $('.chat-discussion').html(data.messages);
-              $('.chat-discussion').scrollTop(10000);
+              $('.chat-discussion').scrollTop(height);
           },
           error: function() {
             console.log("error");
@@ -93,7 +94,7 @@ $(document).ready(function(){
               else if(data.change){
                   var chat = $('.chat-discussion');
                   chat.append(data.messages);
-                  chat.scrollTop(10000);
+                  chat.scrollTop(height);
               }
           },
           error: function(){
@@ -102,19 +103,18 @@ $(document).ready(function(){
       });
   }
   function incrementNotifications(){
-      /*$.ajax({
+      $.ajax({
           type: "POST",
           url: 'incrementNotif.php',
           dataType: "json",
           data: {test: "hello"},
           success: function(data){
-                
+              console.log("success");
           },
           error: function(){
-              console.log("error");
+              console.log("incr error");
           }
-      });*/
-      
+      });
   }
 
   function refreshNotifications(){
