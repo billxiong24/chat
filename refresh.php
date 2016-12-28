@@ -11,8 +11,8 @@ if(isset($_SESSION['user'])){
     $notif_manager = $_SESSION['notifs'];
     
 	$manager = $_SESSION['manager'];
-
     $last_id = $manager->load_last_id(); 
+
     if($_SESSION['last_message_id'] != $last_id['line_id']){
         $_SESSION['last_message_id'] = $last_id['line_id'];
         $manager->update_timestamp();  

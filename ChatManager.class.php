@@ -4,11 +4,13 @@ class ChatManager{
     private $chat_id;
     private $chat_name;
     private $users;
+    private $exists;
 
     public function __construct($id, $name = "Chat", $people = array()){
         $this->chat_id = $id;
         $this->users = $people; 
         $this->chat_name = $name;
+        $this->exists = true;
     }
     public function get_id(){
         return $this->chat_id;
@@ -19,6 +21,13 @@ class ChatManager{
     public function get_users(){
         return $this->users;
     }
+    public function chat_exists(){
+        $query = "SELECT id FROM chats WHERE id = '".$this->chat_id."'";
+        $result = DataBase::make_query($query);
+        $this->exists = $result->num_rows != 0; 
+        return $this->exists;
+    }
+
     public function add_chat(){ 
         //TODO real error handling
         if(!isset($_SESSION['user'])){
@@ -56,6 +65,7 @@ class ChatManager{
 
         $delete_updates = "DELETE FROM chat_updates WHERE id = '".$this->chat_id."'";
         DataBase::make_query($delete_updates);
+        $this->exists = false;
     }
     public static function load_chats(){
         if(!isset($_SESSION['user'])){
@@ -63,7 +73,7 @@ class ChatManager{
         }         
         $username = $_SESSION['user'];
 
-        $query = "SELECT * FROM chat_updates WHERE users LIKE '%{$username}%' ORDER BY date DESC"; 
+        $query = "SELECT * FROM chat_updates AS up JOIN chats AS ch on up.id = ch.id WHERE users = '".$_SESSION['user']."' ORDER by ch.timestamp DESC";
         return DataBase::make_query($query);
     }
     public static function load_chat_users($chat_id){
@@ -76,6 +86,7 @@ class ChatManager{
         return $users;
             
     }
+
     public function load_last_id(){
         $username = $_SESSION['user'];
         if(!isset($_SESSION['user'])){

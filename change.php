@@ -13,6 +13,7 @@ if(isset($_SESSION['user']) && isset($_POST['chatID'])){
     $curr = ChatManager::load_chat_id($_POST['chatID']);
 	$manager = new ChatManager($curr['id'], $curr['name'], ChatManager::load_chat_users($curr['id']));
 
+    $_SESSION['last_chat_id'] = $curr['id'];
     unset($_SESSION['manager']);
     $_SESSION['manager'] = $manager;
 

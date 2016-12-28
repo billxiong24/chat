@@ -6,9 +6,17 @@ include 'ChatUser.class.php';
 	session_start();
 	if(isset($_POST['text']) && isset($_SESSION['user']) && isset($_SESSION['manager'])){
 		DataBase::init();
-		echo json_encode(array("user"=>$_SESSION['user'], "message"=>$_POST['text']));
+
 		$manager = $_SESSION['manager'];
-		$manager->submit_chat($_POST['text']);
+        
+        //$test = $manager->chat_exists();
+        if($manager->chat_exists()){
+		    echo json_encode(array("deleted"=>false));
+		    $manager->submit_chat($_POST['text']);
+        }
+        else{
+		    echo json_encode(array("deleted"=>true));
+        }
 	}
 	else{
 		//TODO some error checking

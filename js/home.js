@@ -1,6 +1,6 @@
 $(document).ready(function(){
      
-    $('.chat-discussion').animate({ scrollTop: $('#end-chat').position().top }, 'slow');
+    $('.chat-discussion').animate({ scrollTop: $('#end-chat').position().top }, 'fast');
     refresh = setInterval(function(){
        refreshMessages();
     }, 100);
@@ -12,11 +12,15 @@ $(document).ready(function(){
           dataType: "json",
           data: {text: $('.message-input').val()},
           success: function(data) {
+              if(data.deleted){
+                  window.location.replace("home.php");
+              }
             $('.message-input').val("");
-          
+            //$('.chat-discussion').append();
             $('.chat-discussion').scrollTop(10000);
           },
           error: function() {
+              console.log("Wat");
           }
         });
 
