@@ -81,6 +81,9 @@ $(document).ready(function(){
           }
         });
   });
+  $('.message-input').focus(function(){
+      console.log("hi");
+  });
   function refreshMessages(){
       $.ajax({
           type: "POST",
