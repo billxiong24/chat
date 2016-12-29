@@ -32,13 +32,29 @@ class Notification{
             return;
         }
         $notifications = array();
-        $query = "SELECT notifications FROM chat_updates WHERE users = '".$_SESSION['user']."'";
+        $query = "SELECT id, notifications FROM chat_updates WHERE users = '".$_SESSION['user']."'";
         $res = DataBase::make_query($query);
 
         while($row = mysqli_fetch_assoc($res)){
-            array_push($notifications, $row['notifications']);
+            $notifications[$row['id']] = $row['notifications'];
         }
         return $notifications;
+    }
+    public function compare_notifications(array $old_arr, array $new_arr){
+        if(!isset($_SESSION['user'])){
+            return;
+        }
+        if(count($old_arr) != count($new_arr)){
+            return false;
+        }
+        foreach($new_arr as $element=>$value){
+            if(!array_key_exists($element, $old_arr)){
+                return false;
+            }
+            if($value != $old_arr[$element])
+                return false;
+        }
+        return true;
     }
      
 

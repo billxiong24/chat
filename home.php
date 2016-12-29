@@ -235,7 +235,10 @@ $chats = ChatManager::load_chats();
                                         <?php
                                         $_SESSION['chat_ids'] = array();
                                         mysqli_data_seek($chats, 0);
-                                        $notifs = '<div class="label-warning notif">4</div>'; 
+                                        $notif_obj = new Notification($manager);
+                                        $_SESSION['notifs'] = $notif_obj;
+                                        $_SESSION['last_notifs'] = $notif_obj->retrieve_notifications();
+                                        
                                         while($row = mysqli_fetch_assoc($chats)){
                                             array_push($_SESSION['chat_ids'], $row['id']);
                                             echo '<div class="chat-user">
@@ -243,7 +246,7 @@ $chats = ChatManager::load_chats();
                                                     <img class="chat-avatar" src="img/a4.jpg" alt="" >
                                                     <div class="chat-user-name">
                                                         <input class = "btn" type="submit" name = "chatname"' .' value="'. $row["name"] .'">
-                                                        '.$notifs.'
+                                                        <div class="label-warning notif">'.$_SESSION['last_notifs'][$row['id']].'</div> 
                                                     </div>
                                                     </form>
                                                     <form class="remove-chat" method="post" action="remove.php" id='.$row["id"].'>
@@ -253,8 +256,6 @@ $chats = ChatManager::load_chats();
                                         }
 
 
-                                        $notif_obj = new Notification($manager);
-                                        $_SESSION['notifs'] = $notif_obj;
                                         ?>
                                     </div>
 

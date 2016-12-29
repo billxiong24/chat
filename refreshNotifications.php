@@ -8,11 +8,17 @@ include 'Display.class.php';
 
 session_start();
 if(isset($_SESSION['user'])){
+
     DataBase::init();
     $notif_manager = $_SESSION['notifs'];
     $notifications = $notif_manager->retrieve_notifications(); 
-    $display = Display::display_notifications($notifications);
-    echo json_encode(array("notifs"=>$display));
+    if(!$notif_manager->compare_notifications($_SESSION['last_notifs'], $notifications)){
+        $_SESSION['last_notifs'] = $notifications;
+        echo json_encode(array("changed"=>true, "notifications"=>$notifications));
+    }
+    else{
+        echo json_encode(array("changed"=>false));
+    }
 }
 
 ?>

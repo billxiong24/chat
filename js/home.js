@@ -109,7 +109,7 @@ $(document).ready(function(){
           dataType: "json",
           data: {test: "hello"},
           success: function(data){
-              console.log("success");
+
           },
           error: function(){
               console.log("incr error");
@@ -124,6 +124,15 @@ $(document).ready(function(){
           dataType: "json",
           data: {test: "hello"},
           success: function(data){
+              if(data.changed){
+                  $.each(data.notifications, function(index, val){
+                      $('#' + index).find('.notif').text(val);
+                      
+                  });
+                 /*$('.users-list').find('.notif').each(function(index){
+                     console.log($(this).text());
+                 });*/
+              }
           },
           error: function(){
               console.log("error");
