@@ -41,6 +41,7 @@ $(document).ready(function(){
               $('.ibox-title .message-title').html(data.title);
               $('.chat-discussion').html(data.messages);
               $('.chat-discussion').scrollTop(height);
+              resetNotifications();              
           },
           error: function() {
             console.log("error");
@@ -71,7 +72,6 @@ $(document).ready(function(){
           dataType: "json",
           data: {useradd: $('.add-user-info').val()},
           success: function(data) {
-              console.log(data.duplicate);
               if(data.duplicate)
                   $('.ibox-title .message-title').html(data.new_title);
               $('.add-user-info').val("");
@@ -82,8 +82,23 @@ $(document).ready(function(){
         });
   });
   $('.message-input').focus(function(){
-      console.log("hi");
+
   });
+  
+  function resetNotifications(){
+       $.ajax({
+          type: "POST",
+          url: "resetNotif.php",
+          dataType: "json",
+          data: {test: "hello"},
+          success: function(data) {
+
+          },
+          error: function() {
+            console.log("error");
+          }
+        });
+  }
   function refreshMessages(){
       $.ajax({
           type: "POST",

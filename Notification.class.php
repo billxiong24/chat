@@ -14,6 +14,9 @@ class Notification{
     public function set_manager($new_manager){
         $this->manager = $new_manager;
     }
+    public function get_manager(){
+        return $this->manager;
+    }
 
     public function increment_notifications(){
         //TODO error?
@@ -39,6 +42,15 @@ class Notification{
             $notifications[$row['id']] = $row['notifications'];
         }
         return $notifications;
+    }
+    public function reset_notifications(){
+        if(!isset($_SESSION['user'])){
+            return;
+        }
+        $curr_id = $this->manager->get_id();
+
+        $query = "UPDATE chat_updates SET notifications = 0 WHERE id = '".$curr_id."' AND users = '".$_SESSION['user']."'";
+        DataBase::make_query($query);
     }
     public function compare_notifications(array $old_arr, array $new_arr){
         if(!isset($_SESSION['user'])){

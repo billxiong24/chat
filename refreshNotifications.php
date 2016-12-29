@@ -14,7 +14,7 @@ if(isset($_SESSION['user'])){
     $notifications = $notif_manager->retrieve_notifications(); 
     if(!$notif_manager->compare_notifications($_SESSION['last_notifs'], $notifications)){
         $_SESSION['last_notifs'] = $notifications;
-        echo json_encode(array("changed"=>true, "notifications"=>$notifications));
+        echo json_encode(array("notifs"=>$notif_manager, "changed"=>true, "notifications"=>$notifications));
     }
     else{
         echo json_encode(array("changed"=>false));

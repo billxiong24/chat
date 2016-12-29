@@ -5,6 +5,7 @@ include 'DataBase.class.php';
 include 'Display.class.php';
 include 'ChatLine.class.php';
 session_start();
+
 //TODO change works now
 if(isset($_SESSION['user']) && isset($_POST['useradd'])){
     DataBase::init();
