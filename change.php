@@ -29,5 +29,8 @@ if(isset($_SESSION['user']) && isset($_POST['chatID'])){
 	$messages = Display::change_messages($manager);
 	echo json_encode(array("title"=>$title, "messages"=>$messages[0]));
 }
+else{
+    echo "error here";
+}
 
 ?>

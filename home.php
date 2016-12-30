@@ -246,7 +246,7 @@ $chats = ChatManager::load_chats();
                                                     <img class="chat-avatar" src="img/a4.jpg" alt="" >
                                                     <div class="chat-user-name">
                                                         <input class = "btn" type="submit" name = "chatname"' .' value="'. $row["name"] .'">
-                                                        <div class="label-warning notif">'.$_SESSION['last_notifs'][$row['id']].'</div> 
+                                                        <div class="label-warning notif" style="display: none">'.$_SESSION['last_notifs'][$row['id']].'</div> 
                                                     </div>
                                                     </form>
                                                     <form class="remove-chat" method="post" action="remove.php" id='.$row["id"].'>

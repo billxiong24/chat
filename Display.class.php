@@ -36,19 +36,6 @@ class Display{
     public static function display_latest_message($user, $text){
         return Display::get_message($user, $text);
     }
-    public static function change_chat_list($chats){
-        $message = "";
-        mysqli_data_seek($chats, 0);
-        while($row = mysqli_fetch_assoc($chats)){
-            $message .='<form class="chat-user" '. 'id=' . $row["id"] .' method = "post" action="change.php">
-                     <img class="chat-avatar" src="img/a4.jpg" alt="" >
-                         <div class="chat-user-name">
-                            <input class = "btn" type="submit" name = "chatname"' .' value="'. $row["name"] .'">
-                         </div>
-                  </form>';
-        }
-        return $message;    
-    }
 
     public static function reload_delete($chats){
         mysqli_data_seek($chats, 0);

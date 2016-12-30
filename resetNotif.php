@@ -12,7 +12,7 @@ if(isset($_SESSION['user'])){
     $notif_manager = $_SESSION['notifs'];
     $manager = $_SESSION['manager'];
     $notif_manager->reset_notifications();
-    echo json_encode(array("test"=>$a));
+    echo json_encode(array());
 }
 
 ?>

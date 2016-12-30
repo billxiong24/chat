@@ -1,10 +1,11 @@
 $(document).ready(function(){
-     
+    showNotifs();     
     var height = 100000;
     $('.chat-discussion').animate({ scrollTop: $('#end-chat').position().top }, 'fast');
     refresh = setInterval(function(){
         refreshMessages();
         refreshNotifications();
+        //refreshChatList();
     }, 100);
     $('.submit-message').submit(function(event){
         event.preventDefault();
@@ -21,6 +22,7 @@ $(document).ready(function(){
               //$('.chat-discussion').append();
               $('.chat-discussion').scrollTop(height);
               incrementNotifications();
+              resetNotifications();
           },
           error: function() {
               console.log("Wat");
@@ -84,7 +86,24 @@ $(document).ready(function(){
   $('.message-input').focus(function(){
 
   });
-  
+    
+  function refreshChatList(){
+       $.ajax({
+          type: "POST",
+          url: "refreshChatList.php",
+          dataType: "json",
+          data: {test: "hello"},
+          success: function(data) {
+              if(data.change){
+                $('.users-list').html(data.newList);
+              }
+          },
+          error: function() {
+            console.log("refreshchat error");
+          }
+        });
+      
+  } 
   function resetNotifications(){
        $.ajax({
           type: "POST",
@@ -144,8 +163,14 @@ $(document).ready(function(){
           success: function(data){
               if(data.changed){
                   $.each(data.notifications, function(index, val){
-                      $('#' + index).find('.notif').text(val);
-                      
+                      var element = $('#' + index).find('.notif');
+                      if(val != 0){
+                          element.show();
+                          element.text(val);
+                      }
+                      else{
+                          element.hide();
+                      }
                   });
                  /*$('.users-list').find('.notif').each(function(index){
                      console.log($(this).text());
@@ -157,6 +182,13 @@ $(document).ready(function(){
           }
       });
 
+  }
+  function showNotifs(){
+    $('.notif').each(function(index, object){
+        if($(object).text() != 0){
+            $(object).css('display', 'inline-block');
+        }
+    });
   }
   
 });

@@ -13,12 +13,13 @@ if(isset($_SESSION['user'])){
 
     if($_SESSION['last_message_id'] != $last_id['line_id']){
         $_SESSION['last_message_id'] = $last_id['line_id'];
+
+        //move this to a different file, to minimize actions in refreshing messages
         $manager->update_timestamp(); 
 
         $messages = Display::display_latest_message($last_id['username'], $last_id['text']);
-        $chats = Display::change_chat_list($chat);
         
-        echo json_encode(array("logged_in"=>true, "change"=>true, "messages"=>$messages, "chats"=>$chats));
+        echo json_encode(array("logged_in"=>true, "change"=>true, "messages"=>$messages));
     }
     else{
         echo json_encode(array("logged_in"=>true, "change"=>false));
