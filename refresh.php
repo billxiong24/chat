@@ -17,7 +17,7 @@ if(isset($_SESSION['user'])){
         //move this to a different file, to minimize actions in refreshing messages
         $manager->update_timestamp(); 
 
-        $messages = Display::display_latest_message($last_id['username'], $last_id['text']);
+        $messages = Display::display_latest_message($last_id['username'], $last_id['text'], $last_id['timestamp']);
         
         echo json_encode(array("logged_in"=>true, "change"=>true, "messages"=>$messages));
     }

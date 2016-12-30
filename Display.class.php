@@ -4,13 +4,13 @@ class Display{
         return '<small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>'
             .$manager->get_name() . ' (' . join(",", $manager->get_users()). ')';  
     }
-    private static function get_message($user, $message){
+    private static function get_message($user, $message, $timestamp){
 
         return '<div class="chat-message left">
                 <img class="message-avatar" src="img/a1.jpg" alt="" >
                 <div class="message">
                     <a class="message-author" href="#">'.$user .'</a>
-                    <span class="message-date"> Mon Jan 26 2015 - 18:39:23 </span>
+                    <span class="message-date">'.$timestamp.'</span>
                     <span class="message-content">'
                     . $message .
                     '</span>
@@ -33,8 +33,8 @@ class Display{
         return array($message, $line_count);
 
     }
-    public static function display_latest_message($user, $text){
-        return Display::get_message($user, $text);
+    public static function display_latest_message($user, $text, $timestamp){
+        return Display::get_message($user, $text, $timestamp);
     }
 
     public static function reload_delete($chats){

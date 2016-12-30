@@ -215,7 +215,9 @@ $chats = ChatManager::load_chats();
                                             <img class="message-avatar" src="img/a1.jpg" alt="" >
                                             <div class="message" id="mess">
                                                 <a class="message-author" href="#">'.$row['username'].'</a>
-                                                <span class="message-date"> Mon Jan 26 2015 - 18:39:23 </span>
+                                                <div class="date"><span class="message-date">'.$row['timestamp'].'</span></div>
+                                                <i class="fa fa-thumbs-up pull-right" aria-hidden="true"></i>
+
                                                 <span class="message-content">'
                                                 . $row['text'].
                                                 '</span>
