@@ -5,7 +5,7 @@ $(document).ready(function(){
     refresh = setInterval(function(){
         refreshMessages();
         refreshNotifications();
-        //refreshChatList();
+        refreshChatList();
     }, 100);
     $('.submit-message').submit(function(event){
         event.preventDefault();
@@ -32,7 +32,7 @@ $(document).ready(function(){
     });
 
 
-  $('.change-chat').submit(function(event){
+  $('#wrapper').on('submit', '.change-chat', function(event){
       event.preventDefault();
        $.ajax({
           type: "POST",
@@ -50,7 +50,7 @@ $(document).ready(function(){
           }
         });
   });
-  $('.remove-chat').submit(function(event){
+  $('#wrapper').on('submit', '.remove-chat', function(event){
       event.preventDefault();
        $.ajax({
           type: "POST",

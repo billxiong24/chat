@@ -201,7 +201,7 @@ $chats = ChatManager::load_chats();
                         <div class="row">
 
                             <div class="col-md-9 ">
-                                <div class="chat-discussion">
+                                <div class="chat-discussion content">
                                     <?php
                                         //hardcoded for now;
                                         $lines = $manager->load_chat_lines();
@@ -301,7 +301,42 @@ $chats = ChatManager::load_chats();
         </div>
 
         <div class="content">
+        <?php
+            $lines = $manager->load_chat_lines();
+            $line_count = 0;
+            $last_message_id;
+            while($row = mysqli_fetch_assoc($lines)){
+                $last_message_id = $row['line_id'];
+                $line_count++;
+                if(strcmp($_SESSION['user'], $row['username']) == 0){
+                    echo '<div class="right">
+                        <div class="author-name">
+                            '.$row['username'].'<small class="chat-date">
+                        '.$row['timestamp'].'
+                        </small>
+                        </div>
+                        <div class="chat-message active">
+                        '.$row['text'].'
+                        </div>
 
+                    </div>';
+
+                 }
+                else{
+                    echo '<div class="left">
+                        <div class="author-name">
+                            '.$row['username'].'<small class="chat-date">
+                        '.$row['timestamp'].'
+                        </small>
+                        </div>
+                        <div class="chat-message">
+                        '.$row['text'].'
+                        </div>
+
+                    </div>';
+                }
+            }
+        ?>
             <div class="left">
                 <div class="author-name">
                     Monica Jackson <small class="chat-date">

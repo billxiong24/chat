@@ -10,7 +10,8 @@ class Display{
                 <img class="message-avatar" src="img/a1.jpg" alt="" >
                 <div class="message">
                     <a class="message-author" href="#">'.$user .'</a>
-                    <span class="message-date">'.$timestamp.'</span>
+                    <div class="date"><span class="message-date">'.$timestamp.'</span></div>
+                    <i class="fa fa-thumbs-up pull-right" aria-hidden="true"></i>
                     <span class="message-content">'
                     . $message .
                     '</span>
@@ -28,7 +29,7 @@ class Display{
         $line_count = 0;
         while($row = mysqli_fetch_assoc($lines)){
             $line_count++;
-            $message .= Display::get_message($row['username'], $row['text']);
+            $message .= Display::get_message($row['username'], $row['text'], $row['timestamp']);
         }
         return array($message, $line_count);
 
@@ -54,6 +55,25 @@ class Display{
                     </div>';
         }
         return $html;
+    }
+    public static function change_chat_list($chats){
+        $message = "";
+        mysqli_data_seek($chats, 0);
+        while($row = mysqli_fetch_assoc($chats)){
+            $message .= '<div class="chat-user">
+                    <form class="change-chat" '. 'id=' . $row["id"] .' method = "post" action="change.php">
+                    <img class="chat-avatar" src="img/a4.jpg" alt="" >
+                    <div class="chat-user-name">
+                        <input class = "btn" type="submit" name = "chatname"' .' value="'. $row["name"] .'">
+                        <div class="label-warning notif" style="display: none">'.$_SESSION['last_notifs'][$row['id']].'</div> 
+                    </div>
+                    </form>
+                    <form class="remove-chat" method="post" action="remove.php" id='.$row["id"].'>
+                    <button class="small-buttons pull-right" type="submit" style="margin-top: -35px"><i class="fa fa-trash"></i></button>
+                    </form>
+                    </div>';
+        }
+        return $message;    
     }
     public static function display_notifications(array $notifications){
         $notif_arr = array();
