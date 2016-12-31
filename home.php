@@ -1,23 +1,12 @@
 <?php
-include 'ChatManager.class.php';
-include 'Notification.class.php';
-include 'DataBase.class.php';
-include 'ChatLine.class.php';
-include 'ChatUser.class.php';
-//TODO real auth here
+include 'Loader.class.php';
+
 session_start();
-DataBase::init();
 if(!isset($_SESSION['user'])){
     header("Location: index.php");
 }
-//hashmap maybe
-/*if(isset($_SESSION['chats']) && isset($_POST['message'])){
-    $man = $_SESSION['chats'][0]->submit_chat($_POST['message']);
-    unset($_POST['message']);
-    header('Location: line.php');
-}*/
-$chats = ChatManager::load_chats();
-//$chat = new ChatManager(13, "Group chat", array("wwx"));
+
+$_SESSION['loader'] = new Loader();
 ?>
 
 <!DOCTYPE html>
@@ -68,10 +57,7 @@ $chats = ChatManager::load_chats();
             <li> 
                     <button class="btn small-buttons" style="">
                     <?php
-                        $query = "SELECT first FROM users WHERE username='".$_SESSION['user']."'";
-                        $name = DataBase::make_query($query);
-                        $row = mysqli_fetch_assoc($name);
-                        echo $row['first'];
+                        echo $_SESSION['loader']->load_first_name(); 
                     ?>
                     </button>
             </li>
@@ -166,26 +152,12 @@ $chats = ChatManager::load_chats();
         </div>
     </div> -->
     <div class="row">
-        <div class="col-lg-12">
-
+        <div class="col-lg-1"></div>
+        <div class="col-lg-10">
                 <div class="ibox chat-view">
-
                     <div class="ibox-title">
                         <?php
-                        /**
-                         * TODO make this look nicer, store current chat in less ratchet way
-                         * put this somewhere else other than main
-                         *
-                         */
-                            $curr = mysqli_fetch_assoc($chats);
-                            //stores the current chat thats open
-                            $_SESSION['last_chat_id'] = $curr['id'];
-                            $users = ChatManager::load_chat_users($curr['id']);
-                            $manager = new ChatManager($curr['id'], $curr['name'], $users);
-
-                            $_SESSION['manager'] = $manager;
-                            echo'<span class="message-title"><small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>'
-                            .$curr["name"] . ' (' . join(",", $users). ')</span>';
+                            echo $_SESSION['loader']->load_title();
                          ?>
                     <div style="display: inline; ">
                         <form class="add-user" method="post" action="adduser.php"> 
@@ -199,32 +171,11 @@ $chats = ChatManager::load_chats();
                     <div class="ibox-content">
 
                         <div class="row">
-
-                            <div class="col-md-9 ">
-                                <div class="chat-discussion content">
+                            <div class="col-md-9">
+                                <div class="chat-discussion content" style="background-color: white;">
                                     <?php
                                         //hardcoded for now;
-                                        $lines = $manager->load_chat_lines();
-                                        $line_count = 0;
-                                        $last_message_id;
-                                        while($row = mysqli_fetch_assoc($lines)){
-                                             
-                                             $last_message_id = $row['line_id'];
-                                             $line_count++;
-                                             echo '<div class="chat-message left">
-                                            <img class="message-avatar" src="img/a1.jpg" alt="" >
-                                            <div class="message" id="mess">
-                                                <a class="message-author" href="#">'.$row['username'].'</a>
-                                                <div class="date"><span class="message-date">'.$row['timestamp'].'</span></div>
-                                                <i class="fa fa-thumbs-up pull-right" aria-hidden="true"></i>
-
-                                                <span class="message-content">'
-                                                . $row['text'].
-                                                '</span>
-                                            </div>
-                                        </div>';
-                                        }
-                                        $_SESSION['last_message_id'] = $last_message_id;
+                                        echo $_SESSION['loader']->load_chat_lines();
                                     ?>
                                     <div id="end-chat"></div>
 
@@ -235,29 +186,7 @@ $chats = ChatManager::load_chats();
                                 <div class="chat-users">
                                     <div class="users-list">
                                         <?php
-                                        $_SESSION['chat_ids'] = array();
-                                        mysqli_data_seek($chats, 0);
-                                        $notif_obj = new Notification($manager);
-                                        $_SESSION['notifs'] = $notif_obj;
-                                        $_SESSION['last_notifs'] = $notif_obj->retrieve_notifications();
-                                        
-                                        while($row = mysqli_fetch_assoc($chats)){
-                                            array_push($_SESSION['chat_ids'], $row['id']);
-                                            echo '<div class="chat-user">
-                                                    <form class="change-chat" '. 'id=' . $row["id"] .' method = "post" action="change.php">
-                                                    <img class="chat-avatar" src="img/a4.jpg" alt="" >
-                                                    <div class="chat-user-name">
-                                                        <input class = "btn" type="submit" name = "chatname"' .' value="'. $row["name"] .'">
-                                                        <div class="label-warning notif" style="display: none">'.$_SESSION['last_notifs'][$row['id']].'</div> 
-                                                    </div>
-                                                    </form>
-                                                    <form class="remove-chat" method="post" action="remove.php" id='.$row["id"].'>
-                                                    <button class="small-buttons pull-right" type="submit" style="margin-top: -35px"><i class="fa fa-trash"></i></button>
-                                                    </form>
-                                                    </div>';
-                                        }
-
-
+                                            echo $_SESSION['loader']->load_chat_list();
                                         ?>
                                     </div>
 
@@ -291,7 +220,7 @@ $chats = ChatManager::load_chats();
 
 </div>
 </div>
-    <div class="small-chat-box fadeInRight animated">
+<!--    <div class="small-chat-box fadeInRight animated">
 
         <div class="heading" draggable="true">
             <small class="chat-date pull-right">
@@ -301,101 +230,8 @@ $chats = ChatManager::load_chats();
         </div>
 
         <div class="content">
-        <?php
-            $lines = $manager->load_chat_lines();
-            $line_count = 0;
-            $last_message_id;
-            while($row = mysqli_fetch_assoc($lines)){
-                $last_message_id = $row['line_id'];
-                $line_count++;
-                if(strcmp($_SESSION['user'], $row['username']) == 0){
-                    echo '<div class="right">
-                        <div class="author-name">
-                            '.$row['username'].'<small class="chat-date">
-                        '.$row['timestamp'].'
-                        </small>
-                        </div>
-                        <div class="chat-message active">
-                        '.$row['text'].'
-                        </div>
-
-                    </div>';
-
-                 }
-                else{
-                    echo '<div class="left">
-                        <div class="author-name">
-                            '.$row['username'].'<small class="chat-date">
-                        '.$row['timestamp'].'
-                        </small>
-                        </div>
-                        <div class="chat-message">
-                        '.$row['text'].'
-                        </div>
-
-                    </div>';
-                }
-            }
-        ?>
-            <div class="left">
-                <div class="author-name">
-                    Monica Jackson <small class="chat-date">
-                    10:02 am
-                </small>
-                </div>
-                <div class="chat-message active">
-                    Lorem Ipsum is simply dummy text input.
-                </div>
-
-            </div>
-            <div class="right">
-                <div class="author-name">
-                    Mick Smith
-                    <small class="chat-date">
-                        11:24 am
-                    </small>
-                </div>
-                <div class="chat-message">
-                    Lorem Ipsum is simpl.
-                </div>
-            </div>
-            <div class="left">
-                <div class="author-name">
-                    Alice Novak
-                    <small class="chat-date">
-                        08:45 pm
-                    </small>
-                </div>
-                <div class="chat-message active">
-                    Check this stock char.
-                </div>
-            </div>
-            <div class="right">
-                <div class="author-name">
-                    Anna Lamson
-                    <small class="chat-date">
-                        11:24 am
-                    </small>
-                </div>
-                <div class="chat-message">
-                    The standard chunk of Lorem Ipsum
-                </div>
-            </div>
-            <div class="left">
-                <div class="author-name">
-                    Mick Lane
-                    <small class="chat-date">
-                        08:45 pm
-                    </small>
-                </div>
-                <div class="chat-message active">
-                    I belive that. Lorem Ipsum is simply dummy text.
-                </div>
-            </div>
-
 
         </div>
-        <div class="form-chat">
             <div class="input-group input-group-sm"><input type="text" class="form-control"> <span class="input-group-btn"> <button
                     class="btn btn-primary" type="button">Send
             </button> </span></div>
@@ -410,7 +246,7 @@ $chats = ChatManager::load_chats();
 
         </a>
     </div>
-</div>
+</div> --!>
 
 
 

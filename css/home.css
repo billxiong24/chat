@@ -48,3 +48,86 @@
 .message{
 
 }
+.small-chat-box {
+    display: none;
+    position: relative;
+    float: right;
+    margin-top: -100px;
+/*    bottom: 20px;
+    right: 75px;*/
+    background: #fff;
+    border: 1px solid #e7eaec;
+    width: 350px;
+    height: 320px;
+  border-radius: 4px;
+}
+.small-chat-box.ng-small-chat {
+    display: block;
+}
+.body-small .small-chat-box {
+  bottom: 70px;
+    right: 20px;
+}
+.small-chat-box.active {
+  display: block;
+}
+.small-chat-box .heading {
+    background: #2f4050;
+    padding: 8px 15px;
+    font-weight: bold;
+    color: #fff;
+}
+.small-chat-box .chat-date {
+    opacity: 0.6;
+    font-size: 10px;
+    font-weight: normal;
+}
+.small-chat-box .content {
+    overflow-y: scroll; 
+    padding: 15px 15px;
+}
+.small-chat-box .content .author-name,.author-name {
+    font-weight: bold;
+    margin-bottom: 3px;
+    font-size: 11px;
+}
+.small-chat-box .content > div {
+    padding-bottom: 20px;
+}
+.small-chat-box .content .chat-message, .chat-message {
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 17px;
+    line-height: 20px;
+    max-width: 60%;
+    background: #f3f3f4;
+    margin-bottom: 10px;
+}
+.small-chat-box .content .chat-message.active, .chat-message.active{
+    background: #1ab394;
+    color: #fff;
+}
+.small-chat-box .content .left ,.left{
+    text-align: left;
+    clear: both;
+}
+.small-chat-box .content .left .chat-message, .left .chat-message{
+    float: left;
+}
+.small-chat-box .content .right, .right{
+    text-align: right;
+    clear: both;
+}
+.small-chat-box .content .right .chat-message, .right .chat-message {
+    float: right;
+}
+.small-chat-box .form-chat {
+    padding: 10px 10px;
+}
+.date-chat{
+    text-align: center;
+    font-size: 9px;
+    font-weight: 500 !important;
+    opacity: 0.6;
+
+}

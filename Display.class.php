@@ -4,19 +4,36 @@ class Display{
         return '<small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>'
             .$manager->get_name() . ' (' . join(",", $manager->get_users()). ')';  
     }
+    public static function load_title($name, $users){
+        return '<span class="message-title"><small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>'
+        .$name. ' (' . join(",", $users). ')</span>';
+
+    }
     private static function get_message($user, $message, $timestamp){
 
-        return '<div class="chat-message left">
-                <img class="message-avatar" src="img/a1.jpg" alt="" >
-                <div class="message">
-                    <a class="message-author" href="#">'.$user .'</a>
-                    <div class="date"><span class="message-date">'.$timestamp.'</span></div>
-                    <i class="fa fa-thumbs-up pull-right" aria-hidden="true"></i>
-                    <span class="message-content">'
-                    . $message .
-                    '</span>
-                </div>
-            </div>';
+         if(strcmp($user, $_SESSION['user']) != 0){
+             return '<div class="left">
+             <div class="author-name" id="mess">
+                <div class="date-chat">'.$timestamp.' </div>
+                <a class="author-name" href="#">'.$user.'</a>
+            </div>
+                <div class="chat-message">'
+                .$message.
+                '</div>
+        </div>';
+         }
+         else{
+             return '<div class="right">
+             <div class="author-name" id="mess">
+                <div class="date-chat">'.$timestamp.' </div>
+                <a class="author-name" href="#">'.$user.'</a>
+            </div>
+                <div class="chat-message active" style="text-align: left">'
+                .$message.
+                '</div>
+        </div>';
+
+         }
     }
     
 
@@ -29,13 +46,13 @@ class Display{
         $line_count = 0;
         while($row = mysqli_fetch_assoc($lines)){
             $line_count++;
-            $message .= Display::get_message($row['username'], $row['text'], $row['timestamp']);
+            $message .= self::get_message($row['username'], $row['text'], $row['timestamp']);
         }
         return array($message, $line_count);
 
     }
     public static function display_latest_message($user, $text, $timestamp){
-        return Display::get_message($user, $text, $timestamp);
+        return self::get_message($user, $text, $timestamp);
     }
 
     public static function reload_delete($chats){
@@ -56,22 +73,26 @@ class Display{
         }
         return $html;
     }
-    public static function change_chat_list($chats){
-        $message = "";
-        mysqli_data_seek($chats, 0);
-        while($row = mysqli_fetch_assoc($chats)){
-            $message .= '<div class="chat-user">
+    public static function display_single_chat($row, $session_last_notifs){
+            
+            return '<div class="chat-user">
                     <form class="change-chat" '. 'id=' . $row["id"] .' method = "post" action="change.php">
                     <img class="chat-avatar" src="img/a4.jpg" alt="" >
                     <div class="chat-user-name">
                         <input class = "btn" type="submit" name = "chatname"' .' value="'. $row["name"] .'">
-                        <div class="label-warning notif" style="display: none">'.$_SESSION['last_notifs'][$row['id']].'</div> 
+                        <div class="label-warning notif" style="display: none">'.$session_last_notifs[$row['id']].'</div> 
                     </div>
                     </form>
                     <form class="remove-chat" method="post" action="remove.php" id='.$row["id"].'>
                     <button class="small-buttons pull-right" type="submit" style="margin-top: -35px"><i class="fa fa-trash"></i></button>
                     </form>
                     </div>';
+    }
+    public static function change_chat_list($chats){
+        $message = "";
+        mysqli_data_seek($chats, 0);
+        while($row = mysqli_fetch_assoc($chats)){
+            $message .= self::display_single_chat($row, $_SESSION['last_notif']);
         }
         return $message;    
     }
