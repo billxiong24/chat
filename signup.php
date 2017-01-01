@@ -13,7 +13,7 @@ if(isset($_POST['user-signup']) && isset($_POST['password-signup'])){
         $test = $new_user->add_user();
         if($test){
             session_start();
-            $_SESSION['user'] = $user;
+            $_SESSION['user'] = DataBase::escape($user);
             header("Location: home.php");
         }
         else{

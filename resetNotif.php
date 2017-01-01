@@ -10,7 +10,6 @@ session_start();
 if(isset($_SESSION['user'])){
     DataBase::init();
     $notif_manager = $_SESSION['notifs'];
-    $manager = $_SESSION['manager'];
     $notif_manager->reset_notifications();
     echo json_encode(array());
 }

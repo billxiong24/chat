@@ -21,6 +21,16 @@ class ChatManager{
     public function get_users(){
         return $this->users;
     }
+    public function set_id($id){
+        $this->chat_id = $id;
+    }
+    public function set_name($name){
+        $this->chat_name = $name;
+    }
+    public function set_users($users){
+        $this->users = $users;
+    }
+
     public function chat_exists(){
         $query = "SELECT id FROM chats WHERE id = '".$this->chat_id."'";
         $result = DataBase::make_query($query);
@@ -71,7 +81,6 @@ class ChatManager{
         if(!isset($_SESSION['user'])){
             return;
         }         
-
         $query = "SELECT * FROM chat_updates AS up JOIN chats AS ch on up.id = ch.id WHERE users = '".$_SESSION['user']."' ORDER by ch.timestamp DESC";
         return DataBase::make_query($query);
     }

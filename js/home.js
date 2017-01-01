@@ -36,7 +36,7 @@ $(document).ready(function(){
       event.preventDefault();
        $.ajax({
           type: "POST",
-          url: 'change.php',
+          url: '/chat/change.php',
           dataType: "json",
           data: {chatID: $(this).attr('id')},
           success: function(data) {

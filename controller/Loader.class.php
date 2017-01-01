@@ -1,10 +1,9 @@
 <?php
-include 'ChatManager.class.php';
-include 'Display.class.php';
-include 'Notification.class.php';
-include 'DataBase.class.php';
-include 'ChatLine.class.php';
-include 'ChatUser.class.php';
+include_once 'ChatManager.class.php';
+include_once 'ChatUser.class.php';
+include_once 'Display.class.php';
+include_once 'Notification.class.php';
+include_once 'Controller.class.php';
 
 /**
  * Loader class loads the initial page and assigns necessary session variables.
@@ -45,12 +44,13 @@ class Loader{
          * TODO get rid of session variables, other classes/functions depend
          * on them too much.
          */
-        $_SESSION['last_chat_id'] = $curr_chat['id'];
+        $_SESSION['user'] = DataBase::escape($_SESSION['user']);
+        $_SESSION['last_chat_id'] = DataBase::escape($curr_chat['id']);
         $_SESSION['notifs'] = $this->notif_manager;
         $_SESSION['last_notifs'] = $this->notif_manager->retrieve_notifications();
-        $_SESSION['manager'] = $this->manager;
+        //$_SESSION['manager'] = $this->manager;
         $_SESSION['chat_ids'] = array();
-
+        $_SESSION['user_controller'] = new Controller($this->manager);
         $this->title = Display::load_title($curr_chat['name'], $users);
         mysqli_data_seek($chats, 0);
          
@@ -78,10 +78,8 @@ class Loader{
              $line_count++;
              echo Display::display_latest_message($row['username'], $row['text'], $row['timestamp']);
         }
-        $_SESSION['last_message_id'] = $last_message_id;
+        $_SESSION['last_message_id'] = DataBase::escape($last_message_id);
         return $chat_lines;
     }
-
-
 }
 ?>
