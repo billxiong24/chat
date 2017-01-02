@@ -1,7 +1,8 @@
 <?php
 include_once 'ChatUser.class.php';
 include_once 'DataBase.class.php';
-class ChatManager{
+include_once 'ChatManager.interface.php';
+class ChatManager implements ChatManagerInterface{
     
     private $chat_id;
     private $chat_name;
