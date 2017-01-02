@@ -1,5 +1,8 @@
 <?php
 'include ChatManager.class.php';
+/**
+ * TODO ELIMINATE CHATMANAGER DEPENDENCY BAD DESIGN
+ */
 class Notification{
     
     private $manager;
@@ -7,7 +10,7 @@ class Notification{
 
     //TODO change parameter to interface, instead of passing in entire class
     //Takes in ChatManager object
-    public function __construct($manager){
+    public function __construct(ChatManager $manager){
         DataBase::init();
         $this->manager= $manager; 
     }

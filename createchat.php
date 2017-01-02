@@ -1,8 +1,8 @@
 <?php
 include 'ChatManager.class.php';
-include 'DataBase.class.php';
-include 'ChatLine.class.php';
-include 'ChatUser.class.php';
+include_once 'DataBase.class.php';
+include_once 'ChatLine.class.php';
+include_once 'ChatUser.class.php';
 session_start();
 
 //works now apparen;y
@@ -27,8 +27,6 @@ function add_new_chat($numbers){
     if(ChatUser::check_user_exists($_POST['user'])){
         $chat = new ChatManager($numbers[0], $_POST['chatname'], array($_SESSION['user'], $_POST['user']));
         $chat->add_chat();
-
-
         return true;
     }
     else{

@@ -4,14 +4,15 @@ include_once 'ChatUser.class.php';
 include_once 'Display.class.php';
 include_once 'Notification.class.php';
 include_once 'Controller.class.php';
-
+include_once 'NotificationController.class.php';
+include_once 'UserController.class.php';
+include_once 'ChatController.class.php';
 /**
  * Loader class loads the initial page and assigns necessary session variables.
  * This class is used only when the page is first loaded- all updating is done
  * in other classes. 
  */
 class Loader{
-
 
     private $manager;
     private $notif_manager;
@@ -21,6 +22,12 @@ class Loader{
     public function __construct(){
         DataBase::init();
         $this->init();
+    }
+    public function __destruct(){
+        unset($this->manager);
+        unset($this->notif_manager);
+        unset($this->chats);
+        unset($this->title);
     }
 
     public function load_first_name(){
@@ -46,15 +53,18 @@ class Loader{
          */
         $_SESSION['user'] = DataBase::escape($_SESSION['user']);
         $_SESSION['last_chat_id'] = DataBase::escape($curr_chat['id']);
-        $_SESSION['notifs'] = $this->notif_manager;
         $_SESSION['last_notifs'] = $this->notif_manager->retrieve_notifications();
         //$_SESSION['manager'] = $this->manager;
         $_SESSION['chat_ids'] = array();
-        $_SESSION['user_controller'] = new Controller($this->manager);
+        $_SESSION['user_controller'] = new UserController($this->manager);
+        $_SESSION['notif_controller'] = new NotificationController($this->manager);
+        $_SESSION['chat_controller'] = new ChatController($this->manager);
+
         $this->title = Display::load_title($curr_chat['name'], $users);
         mysqli_data_seek($chats, 0);
          
     }
+
     public function load_chat_list(){
         //move mysql pointer to beginning, just in case
         mysqli_data_seek($this->chats, 0);

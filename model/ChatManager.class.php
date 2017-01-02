@@ -1,4 +1,6 @@
 <?php
+include_once 'ChatUser.class.php';
+include_once 'DataBase.class.php';
 class ChatManager{
     
     private $chat_id;
@@ -31,13 +33,6 @@ class ChatManager{
         $this->users = $users;
     }
 
-    public function chat_exists(){
-        $query = "SELECT id FROM chats WHERE id = '".$this->chat_id."'";
-        $result = DataBase::make_query($query);
-        $this->exists = $result->num_rows != 0; 
-        return $this->exists;
-    }
-
     public function add_chat(){ 
         //TODO real error handling
         if(!isset($_SESSION['user'])){
@@ -66,16 +61,6 @@ class ChatManager{
         $query = "SELECT * FROM chat_updates WHERE users = '".$user."' AND id = '".$chat_id."'";
         $result = DataBase::make_query($query);
         return mysqli_fetch_assoc($result);
-    }
-    public function remove_chat(){
-        $query = "DELETE FROM chats WHERE id = '".$this->chat_id."'"; 
-        DataBase::make_query($query);
-        $delete_lines = "DELETE FROM chat_lines WHERE chat_id = '".$this->chat_id."'";
-        DataBase::make_query($delete_lines);
-
-        $delete_updates = "DELETE FROM chat_updates WHERE id = '".$this->chat_id."'";
-        DataBase::make_query($delete_updates);
-        $this->exists = false;
     }
     public static function load_chats(){
         if(!isset($_SESSION['user'])){
@@ -132,18 +117,88 @@ class ChatManager{
         if(!$chat){
             return;
         }
-        $chat_line = new ChatLine($chat, $_SESSION['user'], $this->chat_id);
-        $chat_line->insert_line();  
-         
-        //TODO add html to display chat on frontend 
-    
+        DataBase::init();
+        if($this->chat_exists()){
+            $chat_line = new ChatLine($chat, $_SESSION['user'], $this->chat_id);
+            $chat_line->insert_line();  
+            return true;
+        }
+        return false; 
     }
-    public function add_user($user){
+    public function add_user($new_user){
         //TODO error checking
-        array_push($this->users, $user);
-        $query = "INSERT INTO chat_updates (id, users, name) VALUES ('".$this->chat_id."', '".$user."', '".$this->chat_name."')"; 
-        DataBase::make_query($query);
+        DataBase::init(); 
+        $people = $this->users;
+
+        if(strpos(join(" ", $people), $new_user) == false && $new_user !== $_SESSION['user'] && ChatUser::check_user_exists($new_user)){
+            array_push($this->users, $new_user);
+            $query = "INSERT INTO chat_updates (id, users, name) VALUES ('".$this->chat_id."', '".$new_user."', '".$this->chat_name."')"; 
+            DataBase::make_query($query);
+            return true;
+        }
+
+        return false;
     } 
+    public function change_chat($chat_id){
+        DataBase::init();
+        $curr = self::load_chat_id($chat_id);
+        $_SESSION['last_chat_id'] = $curr['id'];
+        $new_users = self::load_chat_users($curr['id']);
+
+        //update manager attributes
+        $this->set_id($curr['id']);
+        $this->set_name($curr['name']);
+        $this->set_users($new_users);
+        
+        $_SESSION['last_message_id'] = $this->load_last_id()['line_id'];
+    }
+    public function refresh_messages(){
+        DataBase::init();
+        $last_id = $this->load_last_id();
+        if($_SESSION['last_message_id'] != $last_id['line_id']){
+            $_SESSION['last_message_id'] = $last_id['line_id'];
+            $this->update_timestamp();
+            return $last_id;
+        }
+        return null;
+    }
+    public function refresh_chat_list(){
+        DataBase::init();
+        $result = self::load_chats();
+        $num_chats = mysqli_num_rows($result);
+        if($num_chats != count($_SESSION['chat_ids'])){
+            $_SESSION['chat_ids'] = array();
+            mysqli_data_seek($result, 0);
+            while($row = mysqli_fetch_assoc($result)){
+                array_push($_SESSION['chat_ids'], $row['id']);
+            }
+            return $result;
+        }
+        return null;
+    }
+    public function remove_chat($remove_id){
+        DataBase::init();
+        $curr = self::load_chat_id($remove_id);
+        $manager = new ChatManager($curr['id'], $curr['name'], ChatManager::load_chat_users());
+        $manager->remove_chat_query();
+        return self::load_chats(); 
+    }
+    private function remove_chat_query(){
+        $query = "DELETE FROM chats WHERE id = '".$this->chat_id."'"; 
+        DataBase::make_query($query);
+        $delete_lines = "DELETE FROM chat_lines WHERE chat_id = '".$this->chat_id."'";
+        DataBase::make_query($delete_lines);
+
+        $delete_updates = "DELETE FROM chat_updates WHERE id = '".$this->chat_id."'";
+        DataBase::make_query($delete_updates);
+        $this->exists = false;
+    }
+    private function chat_exists(){
+        $query = "SELECT id FROM chats WHERE id = '".$this->chat_id."'";
+        $result = DataBase::make_query($query);
+        $this->exists = $result->num_rows != 0; 
+        return $this->exists;
+    }
 
     private function check_duplicate_chats(){
         $query = "SELECT * FROM chats WHERE id = '".$this->chat_id."'";
