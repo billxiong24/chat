@@ -1,37 +1,23 @@
 <?php
-'include ChatManager.class.php';
 /**
  * TODO ELIMINATE CHATMANAGER DEPENDENCY BAD DESIGN
  */
 class Notification{
     
-    private $manager;
-    private $notif_ids; 
 
     //TODO change parameter to interface, instead of passing in entire class
     //Takes in ChatManager object
-    public function __construct(ChatManager $manager){
+    public function __construct(){
         DataBase::init();
-        $this->manager= $manager; 
     }
-    public function set_manager($new_manager){
-        $this->manager = $new_manager;
-    }
-    public function get_manager(){
-        return $this->manager;
-    }
-
-    public function increment_notifications(){
+    public function increment_notifications($curr_id){
         //TODO error?
         if(!isset($_SESSION['user'])){
             return;
         }
-        $man = $this->manager;
-        $curr_id = $man->get_id();
         //TODO fix possible sql injection
         $query = "UPDATE chat_updates SET notifications = notifications + 1 WHERE id = '".$curr_id."' AND users <> '".$_SESSION['user']."'";
         DataBase::make_query($query);
-        return $man;
     }
     public function retrieve_notifications(){
         if(!isset($_SESSION['user'])){
@@ -46,12 +32,10 @@ class Notification{
         }
         return $notifications;
     }
-    public function reset_notifications(){
+    public function reset_notifications($curr_id){
         if(!isset($_SESSION['user'])){
             return;
         }
-        $curr_id = $this->manager->get_id();
-
         $query = "UPDATE chat_updates SET notifications = 0 WHERE id = '".$curr_id."' AND users = '".$_SESSION['user']."'";
         DataBase::make_query($query);
     }
@@ -71,7 +55,5 @@ class Notification{
         }
         return true;
     }
-     
-
 }
 ?>

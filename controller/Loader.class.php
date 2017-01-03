@@ -15,7 +15,6 @@ include_once 'ChatController.class.php';
 class Loader{
 
     private $manager;
-    private $notif_manager;
     private $chats;
     private $title;
       
@@ -45,7 +44,6 @@ class Loader{
         $curr_chat = mysqli_fetch_assoc($this->chats);
         $users = ChatManager::load_chat_users($curr_chat['id']);
         $this->manager = new ChatManager($curr_chat['id'], $curr_chat['name'], $users);
-        $this->notif_manager = new Notification($this->manager);
         
         /**
          * TODO get rid of session variables, other classes/functions depend
@@ -53,7 +51,7 @@ class Loader{
          */
         $_SESSION['user'] = DataBase::escape($_SESSION['user']);
         $_SESSION['last_chat_id'] = DataBase::escape($curr_chat['id']);
-        $_SESSION['last_notifs'] = $this->notif_manager->retrieve_notifications();
+        $_SESSION['last_notifs'] = $this->manager->retrieve_notifications();
         //$_SESSION['manager'] = $this->manager;
         $_SESSION['chat_ids'] = array();
         $_SESSION['user_controller'] = new UserController($this->manager);
@@ -68,7 +66,6 @@ class Loader{
     public function load_chat_list(){
         //move mysql pointer to beginning, just in case
         mysqli_data_seek($this->chats, 0);
-        $notif_obj = $this->notif_manager;
         
         $chat_list = "";
         while($row = mysqli_fetch_assoc($this->chats)){

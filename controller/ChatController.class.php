@@ -1,10 +1,5 @@
 <?php
-include_once 'ChatManager.class.php';
 include_once 'Notification.class.php';
-include_once 'DataBase.class.php';
-include_once 'ChatLine.class.php';
-include_once 'ChatUser.class.php';
-include_once 'Display.class.php';
 include_once 'Controller.class.php';
 
 class ChatController extends Controller{
@@ -25,7 +20,7 @@ class ChatController extends Controller{
     } 
     public function refresh_chat_list(){
         if($result = parent::get_manager()->refresh_chat_list()){
-            $list = Display::change_chat_list($result);
+            $list = $this->render_chats($result);
             return array("change"=>true, "newList"=>$list);
         }
         else{
@@ -35,6 +30,15 @@ class ChatController extends Controller{
     public function remove_chat($remove_id){
         $chats = parent::get_manager()->remove_chat($remove_id);
         return array("list"=>Display::reload_delete($chats));
+    }
+
+    private function render_chats($result){
+        mysqli_data_seek($result, 0);
+        $list = "";
+        while($row = mysqli_fetch_assoc($result)){
+            $list .= Display::display_single_chat($row, parent::get_manager()->get_session_last_notifs());
+        }
+        return $list; 
     }
 }
 ?>

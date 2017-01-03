@@ -1,14 +1,11 @@
 <?php
 class Display{
-    public static function change_title($manager){
-        return '<small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>'
-            .$manager->get_name() . ' (' . join(",", $manager->get_users()). ')';  
-    }
     public static function load_title($name, $users){
         return '<span class="message-title"><small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>'
         .$name. ' (' . join(",", $users). ')</span>';
 
     }
+    //TODO remove logic from this method
     private static function get_message($user, $message, $timestamp){
 
          if(strcmp($user, $_SESSION['user']) != 0){
@@ -87,14 +84,6 @@ class Display{
                     <button class="small-buttons pull-right" type="submit" style="margin-top: -35px"><i class="fa fa-trash"></i></button>
                     </form>
                     </div>';
-    }
-    public static function change_chat_list($chats){
-        $message = "";
-        mysqli_data_seek($chats, 0);
-        while($row = mysqli_fetch_assoc($chats)){
-            $message .= self::display_single_chat($row, $_SESSION['last_notif']);
-        }
-        return $message;    
     }
     public static function display_notifications(array $notifications){
         $notif_arr = array();

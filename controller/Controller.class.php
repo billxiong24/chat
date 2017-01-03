@@ -27,9 +27,7 @@ class Controller implements ControllerInterface{
         return $this->manager;
     }
     public function set_manager_attributes($id, $name, array $users){
-        $this->manager->set_id($id);
-        $this->manager->set_name($name);
-        $this->manager->set_users($users);
+        $this->manager->set_attributes($id, $name, $users);
     }
 }
 ?>

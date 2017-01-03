@@ -19,7 +19,7 @@ class UserController extends Controller{
     public function change_chat($chat_id){
         $manager = parent::get_manager();
         parent::get_manager()->change_chat($chat_id);
-        $title = Display::change_title($manager);
+        $title = Display::load_title($manager->get_name(), $manager->get_users());
 
         /**
          * TODO find a way to cache the messages so we don't 
