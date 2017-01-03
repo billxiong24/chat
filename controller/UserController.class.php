@@ -8,8 +8,8 @@ class UserController extends Controller{
     }
     public function add_user($new_user){
         if(parent::get_manager()->add_user($new_user)){
-            $new_title = Display::change_title(parent::get_manager()); 
-            return array("duplicate"=> true, "new_title"=>$new_title);
+            $new_title = Display::load_title(parent::get_manager()->get_name(), parent::get_manager()->get_users()); 
+            return array("duplicate"=> true, "new_title"=>$new_title, "test"=>parent::get_manager()->get_users());
         }
         else{
             return array("duplicate"=>false);

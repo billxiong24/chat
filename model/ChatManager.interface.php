@@ -1,7 +1,6 @@
 <?php
-
 /**
- * API for ChatManager, provides set of functions to use
+ * API for ChatManager object, provides set of functions to use
  * in managing chat functions, etc.
  */
 
@@ -70,6 +69,30 @@ interface ChatManagerInterface{
      */
     function remove_chat($remove_id);
     
+    /**
+     * Increment notifications for users except
+     * current session user
+     */
+    function increment_notifications();
+
+    /**
+     * Get notifications for all users in the current
+     * chat id
+     */
+    function retrieve_notifications();
+
+    /**
+     * reset all notifications for all users in current
+     * chat id
+     */
+    function reset_notifications(); 
+
+    /**
+     * Returns true if old number of notifs for all users
+     * is the same, else false if different from current
+     * number of notifs for all users
+     */
+    function compare_notifications(array $old, array $new);
 }
 
 ?>

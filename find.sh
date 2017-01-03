@@ -4,6 +4,6 @@ files=$(find -name "*.php" -print);
 for file in $files; do
     if [ ! -d "$file" ]; then
         echo "$file";
-        cat "$file" | grep -E 'set_id';
+        cat "$file" | grep -E 'ChatUser';
     fi
 done;

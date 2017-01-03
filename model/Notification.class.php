@@ -2,7 +2,8 @@
 /**
  * TODO ELIMINATE CHATMANAGER DEPENDENCY BAD DESIGN
  */
-class Notification{
+include 'NotifManager.interface.php';
+class Notification implements NotifManagerInterface{
     
 
     //TODO change parameter to interface, instead of passing in entire class

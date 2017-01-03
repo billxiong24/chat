@@ -1,6 +1,7 @@
 <?php
 include_once 'DataBase.class.php';
-abstract class Manager{
+include_once 'ChatManager.interface.php';
+abstract class Manager implements ChatManagerInterface{
 
     private $id;
     private $name;
@@ -30,6 +31,9 @@ abstract class Manager{
     protected function set_chat_users(array $users){
         $this->users = $users;
     }
+    protected function add_to_users($user){
+        array_push($this->users, $user);
+    }
 
     /**
      * Different subclasses may implement "setter" differently, 
@@ -37,5 +41,23 @@ abstract class Manager{
      */
     public abstract function set_attributes($id, $name, $users);
 
+    /**
+     * Interface methods for subclass to implement.
+     */
+    public abstract function add_chat();
+    public abstract function load_last_id();
+    public abstract function update_timestamp();
+    public abstract function load_chat_lines();
+    public abstract function submit_chat($chat);
+    public abstract function add_user($new_user);
+    public abstract function change_chat($chat_id);
+    public abstract function refresh_messages();
+    public abstract function refresh_chat_list();
+    public abstract function remove_chat($remove_id);
+    public abstract function increment_notifications();
+    public abstract function retrieve_notifications();
+    public abstract function reset_notifications();
+    public abstract function compare_notifications(array $old, array $new);
+    
 }
 ?>

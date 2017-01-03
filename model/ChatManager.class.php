@@ -1,16 +1,17 @@
 <?php
 include_once 'ChatUser.class.php';
 include_once 'DataBase.class.php';
-include_once 'ChatManager.interface.php';
 include_once 'Manager.class.php';
 include_once 'Notification.class.php';
-class ChatManager extends Manager implements ChatManagerInterface{
+class ChatManager extends Manager{
     
     private $exists;
     private $notif_manager;
+    private $chat_user_manager;
     public function __construct($id, $name = "Chat", $people = array()){
         parent::__construct($id, $name, $people);
         $this->notif_manager = new Notification();
+        $this->chat_user_manager = new ChatUser(null, null, null, null);
         $this->exists = true;
     }
     public function get_session_last_notifs(){
@@ -31,17 +32,10 @@ class ChatManager extends Manager implements ChatManagerInterface{
         }
         //TODO rehash or something idk
         if($this->check_duplicate_chats()){
-            echo "duplicate chats";
             return;
         }
-        
-        $query = "INSERT INTO chats (id) VALUES ('".parent::get_id()."')"; 
-        DataBase::make_query($query);
-
-        foreach(parent::get_users() as $user){
-            $query2 = "INSERT INTO chat_updates (id, name, users) VALUES ('".parent::get_id()."', '".parent::get_name()."', '".$user."')";
-            DataBase::make_query($query2);
-        }
+        DataBase::init();
+        $this->chat_user_manager->add_chat(parent::get_users(), parent::get_id(), parent::get_name());
     }
     public static function load_chat_id($chat_id){
         $user = $_SESSION['user'];
@@ -109,8 +103,7 @@ class ChatManager extends Manager implements ChatManagerInterface{
         }
         DataBase::init();
         if($this->chat_exists()){
-            $chat_line = new ChatLine($chat, $_SESSION['user'], parent::get_id());
-            $chat_line->insert_line();  
+            $this->chat_user_manager->submit_chat($chat, parent::get_id());
             return true;
         }
         return false; 
@@ -121,9 +114,8 @@ class ChatManager extends Manager implements ChatManagerInterface{
         $people = parent::get_users();
 
         if(strpos(join(" ", $people), $new_user) == false && $new_user !== $_SESSION['user'] && ChatUser::check_user_exists($new_user)){
-            array_push(parent::get_users(), $new_user);
-            $query = "INSERT INTO chat_updates (id, users, name) VALUES ('".parent::get_id()."', '".$new_user."', '".parent::get_name()."')"; 
-            DataBase::make_query($query);
+            parent::add_to_users($new_user);
+            $this->chat_user_manager->add_chat_user($new_user, parent::get_id(), parent::get_name());
             return true;
         }
 
