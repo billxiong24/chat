@@ -48,12 +48,14 @@ class Loader{
         /**
          * TODO get rid of session variables, other classes/functions depend
          * on them too much.
+         * USING a lot of paralle arrays, coalesce them into an object
          */
         $_SESSION['user'] = DataBase::escape($_SESSION['user']);
         $_SESSION['last_chat_id'] = DataBase::escape($curr_chat['id']);
         $_SESSION['last_notifs'] = $this->manager->retrieve_notifications();
         //$_SESSION['manager'] = $this->manager;
         $_SESSION['chat_ids'] = array();
+        $_SESSION['last_messages'] = array();
         $_SESSION['user_controller'] = new UserController($this->manager);
         $_SESSION['notif_controller'] = new NotificationController($this->manager);
         $_SESSION['chat_controller'] = new ChatController($this->manager);
@@ -70,7 +72,10 @@ class Loader{
         $chat_list = "";
         while($row = mysqli_fetch_assoc($this->chats)){
             array_push($_SESSION['chat_ids'], $row['id']);
-            $chat_list .= Display::display_single_chat($row, $_SESSION['last_notifs']);
+            $manager = new ChatManager($row['id']);
+            $message = $manager->load_last_id();
+            $_SESSION['last_messages'][$row['id']] = $message;
+            $chat_list .= Display::display_single_chat($row, $_SESSION['last_notifs'], $message);
         }
         return $chat_list;
 
@@ -83,7 +88,7 @@ class Loader{
         while($row = mysqli_fetch_assoc($lines)){
              $last_message_id = $row['line_id'];
              $line_count++;
-             echo Display::display_latest_message($row['username'], $row['text'], $row['timestamp']);
+             $chat_lines .= Display::display_latest_message($row['username'], $row['text'], $row['timestamp']);
         }
         $_SESSION['last_message_id'] = DataBase::escape($last_message_id);
         return $chat_lines;

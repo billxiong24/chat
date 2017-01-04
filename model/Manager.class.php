@@ -58,6 +58,6 @@ abstract class Manager implements ChatManagerInterface{
     public abstract function retrieve_notifications();
     public abstract function reset_notifications();
     public abstract function compare_notifications(array $old, array $new);
-    
+    public abstract function leave_chat();    
 }
 ?>

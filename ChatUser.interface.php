@@ -23,5 +23,10 @@ interface ChatUserInterface{
      * whenever user submits a message
      */
     function submit_chat($chat, $id);
+
+    /**
+     * Remove current session user from chat with id
+     */
+    function remove_from_chat($chat_id, $user);
 }
 ?>

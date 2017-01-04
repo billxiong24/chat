@@ -145,7 +145,8 @@ class ChatManager extends Manager{
         DataBase::init();
         $result = self::load_chats();
         $num_chats = mysqli_num_rows($result);
-        if($num_chats != count($_SESSION['chat_ids'])){
+        $last_message_diffs = $this->check_last_messages($result);
+        if($num_chats != count($_SESSION['chat_ids']) || $last_message_diffs){
             $_SESSION['chat_ids'] = array();
             mysqli_data_seek($result, 0);
             while($row = mysqli_fetch_assoc($result)){
@@ -161,6 +162,11 @@ class ChatManager extends Manager{
         $manager = new ChatManager($curr['id'], $curr['name'], ChatManager::load_chat_users());
         $manager->remove_chat_query();
         return self::load_chats(); 
+    }
+    public function leave_chat(){
+        DataBase::init();
+        $id = parent::get_id();
+        $this->chat_user_manager->remove_from_chat($id, $_SESSION['user']);
     }
 
     /**
@@ -182,7 +188,23 @@ class ChatManager extends Manager{
         return $this->notif_manager->compare_notifications($old_arr, $new_arr);
     }
 
-
+    private function check_last_messages($result){
+        mysqli_data_seek($result, 0);
+        $different = false;
+        $new_arr = array();
+        while($row = mysqli_fetch_assoc($result)){
+            $manager = new ChatManager($row['id']);
+            $message = $manager->load_last_id();
+            $new_arr[$row['id']] = $message;
+            if($_SESSION['last_messages'][$row['id']]['line_id'] != $message['line_id']){
+                $different = true;
+            }
+        }
+        if($different){
+            $_SESSION['last_messages'] = $new_arr;
+        }
+        return $different; 
+    }
     private function remove_chat_query(){
         $query = "DELETE FROM chats WHERE id = '".parent::get_id()."'"; 
         DataBase::make_query($query);

@@ -84,9 +84,25 @@ $(document).ready(function(){
           }
         });
   });
+  $('.leave-chat').submit(function(event){
+      event.preventDefault();
+       $.ajax({
+          type: "POST",
+          url: "leavechat.php",
+          dataType: "json",
+          data: {test: "hello"},
+          success: function(data) {
+              window.location.replace("home.php");
+          },
+          error: function() {
+            console.log("error");
+          }
+        });
+  });
   $('.message-input').focus(function(){
 
   });
+
     
   function refreshChatList(){
        $.ajax({

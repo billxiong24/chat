@@ -33,5 +33,9 @@ class UserController extends Controller{
 		$manager = parent::get_manager(); 
         return array("deleted"=>!$manager->submit_chat($text));
     }
+
+    public function leave_chat(){
+        parent::get_manager()->leave_chat();
+    }
 }
 ?>

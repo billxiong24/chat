@@ -3,7 +3,7 @@
 	color: #464646;
 	border: solid #464646 1px;
 	border-radius: 5px;
-	width: 180px;
+	width: 160px !important;
 }
 .btn-primary:hover,
 .btn-primary:focus,
@@ -96,7 +96,7 @@
 }
 .small-chat-box .content .chat-message, .chat-message {
     padding: 5px 10px;
-    border-radius: 6px;
+    border-radius: 13px;
     font-size: 17px;
     line-height: 20px;
     max-width: 60%;
@@ -104,7 +104,7 @@
     margin-bottom: 10px;
 }
 .small-chat-box .content .chat-message.active, .chat-message.active{
-    background: #1ab394;
+    background: #097054;
     color: #fff;
 }
 .small-chat-box .content .left ,.left{
@@ -124,10 +124,81 @@
 .small-chat-box .form-chat {
     padding: 10px 10px;
 }
+.chat-discussion{
+    border-left: solid #E5E5E5 1px;
+    background-color: white;
+    height: 400px;
+}
+.chat-view{
+
+}
+.chat-name{
+    /*height: 100%;
+    width: 100%;
+    margin: auto;
+    top: 0;
+    left: 0;
+    position: absolute;
+    text-align: left;
+    color: #565656;
+    margin-top: 17px; */
+    margin-right: 15px;
+    padding: 5px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 5px;
+    background-color: #FF9900;
+    font-size: 17px;
+    color: white;
+}
+.ibox-title{
+    position: relative !important;
+}
+.actions-list{
+    text-align: center;
+}
+.chat-actions{
+    margin-top: 15px;
+}
+.container1{
+    display:table;
+    height: 900px;
+    width: 100%;
+    margin-top: -50px;
+    padding: 50px 0 0 0;
+    box-sizing: border-box;
+}
+.row{
+    height: 100%;
+}
+.row .chat-view .ibox-content .cell1{
+    height: 100%;
+}
+html,.top-navigation,.container1, .row{
+    min-height: 100% !important;
+}
+.container-non-responsive {
+    /* Margin/padding copied from Bootstrap */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    /* Set width to your desired site width */
+}
 .date-chat{
     text-align: center;
     font-size: 9px;
     font-weight: 500 !important;
     opacity: 0.6;
+
+}
+.user-title{
+    margin-left: 5px;
+    padding: 4px;
+    padding-left: 7px;
+    padding-right: 7px;
+    border-radius: 5px;
+    background-color: #89C4F4;
+    color: white;
 
 }

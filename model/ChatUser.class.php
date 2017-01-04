@@ -29,6 +29,10 @@ class ChatUser implements ChatUserInterface{
         $chat_line = new ChatLine($chat, $_SESSION['user'], $id);
         $chat_line->insert_line();  
     }
+    public function remove_from_chat($chat_id, $user){
+        $query = "DELETE FROM chat_updates WHERE users = '".$user."' AND id = '".$chat_id."'";
+        DataBase::make_query($query);
+    }
     public function add_user(){
         $check = "SELECT * FROM users WHERE username = '".$this->username."'";
         $res = DataBase::make_query($check);

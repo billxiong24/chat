@@ -151,28 +151,53 @@ $_SESSION['loader'] = new Loader();
             </div>
         </div>
     </div> -->
+    <div class="container1">
     <div class="row">
-        <div class="col-lg-1"></div>
-        <div class="col-lg-10">
                 <div class="ibox chat-view">
                     <div class="ibox-title">
                         <?php
                             echo $_SESSION['loader']->load_title();
                          ?>
-                    <div style="display: inline; ">
+                    </div>
+                    <div class="ibox-content fullscreen">
+                            <div class="col-xs-3 cell1" style = "margin-left: 20px">
+                                <div class="chat-users">
+                                    <div class="actions-list">
+                    <div style="margin-top: 20px">
                         <form class="add-user" method="post" action="adduser.php"> 
                             <input type="text" placeholder="Add user" class="add-user-info" style="display: inline">
                         </form>
-                        <form method="post" action="">
-                            <button class="btn btn-primary">Leave chat</button>
-                        </form>
                     </div>
-                    </div>
-                    <div class="ibox-content">
+                                        <div class="chat-actions">
+                                            <form method = "post" action="addchat.php">
+                                                <button class="btn btn-primary" type = "submit" name = "add">Create new chat</button>
+                                            </form>
+                                        </div>
+                                        <div class="chat-actions">
+                                        <form class="leave-chat" method="post" action="leavechat.php">
+                                            <button class="btn btn-primary">Add people</button>
+                                        </form>
+                                        </div>
+                                        <div class="chat-actions">
+                                        <form class="leave-chat" method="post" action="leavechat.php">
+                                            <button class="btn btn-primary">Delete chat</button>
+                                        </form>
+                                        </div>
+                                        <div class="chat-actions">
+                                        <form class="leave-chat" method="post" action="leavechat.php">
+                                            <button class="btn btn-primary">Leave chat</button>
+                                        </form>
+                                        </div>
+                                        <?php
+                                        ?>
+                                    </div>
+
+                                </div>
+                            </div>
 
                         <div class="row">
-                            <div class="col-md-9">
-                                <div class="chat-discussion content" style="background-color: white;">
+                            <div class="col-xs-6 cell2" >
+                                <div class="chat-discussion content">
                                     <?php
                                         //hardcoded for now;
                                         echo $_SESSION['loader']->load_chat_lines();
@@ -182,7 +207,7 @@ $_SESSION['loader'] = new Loader();
                                 </div>
                                 
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-xs-2 cell3">
                                 <div class="chat-users">
                                     <div class="users-list">
                                         <?php
@@ -195,20 +220,16 @@ $_SESSION['loader'] = new Loader();
 
                         </div>
                         <div class="row">
+                            <div class="col-lg-3"></div>
                             <form class = "submit-message" method="post" action="line.php">
-                            <div class="col-lg-9">
-                                <div class="chat-message-form">
+                            <div class="col-lg-6"style="margin-left: 27px">
+                                <div class="chat-message-form" >
                                     <div class="form-group">
                                         <input class="form-control message-input" name="message" placeholder="Enter message" autocomplete="off">
                                     </div>
                                 </div>
                             </div>
                             </form>
-                            <div style="text-align: center; padding-top: 20px;">
-                                <form method = "post" action="addchat.php">
-                                    <button class="btn btn-primary m-b" type = "submit" name = "add" style="width: 160px">Create new chat</button>
-                                </form>
-                            </div>
 
                     </div>
 
@@ -217,7 +238,7 @@ $_SESSION['loader'] = new Loader();
 
     </div>
 
-
+</div>
 </div>
 </div>
 <!--    <div class="small-chat-box fadeInRight animated">

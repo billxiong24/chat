@@ -1,8 +1,13 @@
 <?php
 class Display{
     public static function load_title($name, $users){
-        return '<span class="message-title"><small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>'
-        .$name. ' (' . join(",", $users). ')</span>';
+        $title = "";
+        $prepend = '<span class="message-title"><small class="pull-right text-muted">Last message:  Mon Jan 26 2015 - 18:39:23</small>';
+        foreach($users as $user){
+            $title .= '<span class = "success user-title">'.$user.'</span>';
+        }
+        $chat_name = '<span class = "chat-name">'.$name.'</span>';
+        return $prepend .$chat_name. $title. '</span>';
 
     }
     //TODO remove logic from this method
@@ -51,7 +56,9 @@ class Display{
     public static function display_latest_message($user, $text, $timestamp){
         return self::get_message($user, $text, $timestamp);
     }
+    public static function display_generic_message($text){
 
+    }
     public static function reload_delete($chats){
         mysqli_data_seek($chats, 0);
         $html = "";
@@ -70,21 +77,27 @@ class Display{
         }
         return $html;
     }
-    public static function display_single_chat($row, $session_last_notifs){
-            
-            return '<div class="chat-user">
-                    <form class="change-chat" '. 'id=' . $row["id"] .' method = "post" action="change.php">
-                    <img class="chat-avatar" src="img/a4.jpg" alt="" >
-                    <div class="chat-user-name">
-                        <input class = "btn" type="submit" name = "chatname"' .' value="'. $row["name"] .'">
-                        <div class="label-warning notif" style="display: none">'.$session_last_notifs[$row['id']].'</div> 
-                    </div>
-                    </form>
-                    <form class="remove-chat" method="post" action="remove.php" id='.$row["id"].'>
-                    <button class="small-buttons pull-right" type="submit" style="margin-top: -35px"><i class="fa fa-trash"></i></button>
-                    </form>
-                    </div>';
+    public static function display_single_chat($row, $session_last_notifs, $last_messages){
+        $message = "";
+        if(!is_null($last_messages)){
+            $message = $last_messages['username'] .  ': '. $last_messages['text'];
+        }
+        return '<div class="" style="width: 100%">
+                <form class="change-chat" '. 'id=' . $row["id"] .' method = "post" action="change.php">
+                <div class="chat-user-name">
+                    <input class = "btn" type="submit" name = "chatname"' .' value="'. $row["name"] .'">
+                    <div class="label-warning notif" style="display: none">'.$session_last_notifs[$row['id']].'</div> 
+                '.$message.'
+                </div>
+                </form>
+                <form class="remove-chat" method="post" action="remove.php" id='.$row["id"].'>
+                <button class="small-buttons pull-right" type="submit" style="margin-top: -35px"><i class="fa fa-trash"></i></button>
+                </form>
+                </div>';
     }
+    public static function display_info(){
+        
+    } 
     public static function display_notifications(array $notifications){
         $notif_arr = array();
         foreach($notifications as $key=>$value){
