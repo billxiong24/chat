@@ -7,6 +7,7 @@ include_once 'Controller.class.php';
 include_once 'NotificationController.class.php';
 include_once 'UserController.class.php';
 include_once 'ChatController.class.php';
+include_once 'SessionControllerBuilder.class.php';
 /**
  * Loader class loads the initial page and assigns necessary session variables.
  * This class is used only when the page is first loaded- all updating is done
@@ -48,7 +49,7 @@ class Loader{
         /**
          * TODO get rid of session variables, other classes/functions depend
          * on them too much.
-         * USING a lot of paralle arrays, coalesce them into an object
+         * USING a lot of parallel arrays, coalesce them into an object
          */
         $_SESSION['user'] = DataBase::escape($_SESSION['user']);
         $_SESSION['last_chat_id'] = DataBase::escape($curr_chat['id']);
@@ -86,9 +87,11 @@ class Loader{
         $line_count = 0;
         $last_message_id;
         while($row = mysqli_fetch_assoc($lines)){
-             $last_message_id = $row['line_id'];
-             $line_count++;
-             $chat_lines .= Display::display_latest_message($row['username'], $row['text'], $row['timestamp']);
+            if($row['username'] !== $_SESSION['user']){
+                $last_message_id = $row['line_id'];
+            }
+            $line_count++;
+            $chat_lines .= Display::display_latest_message($row['username'], $row['text'], $row['timestamp']);
         }
         $_SESSION['last_message_id'] = DataBase::escape($last_message_id);
         return $chat_lines;

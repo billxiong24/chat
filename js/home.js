@@ -11,27 +11,41 @@ $(document).ready(function(){
         event.preventDefault();
         $.ajax({
           type: "POST",
-          url: 'line.php',
+          url: 'insertLine.php',
           dataType: "json",
           data: {text: $('.message-input').val()},
           success: function(data) {
-              if(data.deleted){
-                  window.location.replace("home.php");
-              }
-              $('.message-input').val("");
-              //$('.chat-discussion').append();
-              $('.chat-discussion').scrollTop(height);
-              incrementNotifications();
-              resetNotifications();
+            var chat = $('.chat-discussion');
+            chat.append(data.message);
+            $('.message-input').val("");
+            //$('.chat-discussion').append();
+            $('.chat-discussion').scrollTop(height);
+            submitChat(data.original);
           },
           error: function() {
               console.log("Wat");
           }
         });
-
     });
 
-
+  function submitChat(message){
+    $.ajax({
+      type: "POST",
+      url: 'line.php',
+      dataType: "json",
+      data: {text: message},
+      success: function(data) {
+          if(data.deleted){
+              window.location.replace("home.php");
+          }
+          incrementNotifications();
+          resetNotifications();
+      },
+      error: function() {
+          console.log("Wat");
+      }
+    });
+  }
   $('#wrapper').on('submit', '.change-chat', function(event){
       event.preventDefault();
        $.ajax({
@@ -207,5 +221,4 @@ $(document).ready(function(){
         }
     });
   }
-  
 });

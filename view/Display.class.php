@@ -82,11 +82,16 @@ class Display{
         if(!is_null($last_messages)){
             $message = $last_messages['username'] .  ': '. $last_messages['text'];
         }
+
+        $disp = 'inline-block';
+        if($session_last_notifs[$row['id']] == 0){
+            $disp = 'none';
+        }
         return '<div class="" style="width: 100%">
                 <form class="change-chat" '. 'id=' . $row["id"] .' method = "post" action="change.php">
                 <div class="chat-user-name">
                     <input class = "btn" type="submit" name = "chatname"' .' value="'. $row["name"] .'">
-                    <div class="label-warning notif" style="display: none">'.$session_last_notifs[$row['id']].'</div> 
+                    <div class="label-warning notif" style="display: '.$disp.'">'.$session_last_notifs[$row['id']].'</div> 
                 '.$message.'
                 </div>
                 </form>

@@ -1,8 +1,6 @@
 <?php
-/**
- * TODO ELIMINATE CHATMANAGER DEPENDENCY BAD DESIGN
- */
 include 'NotifManager.interface.php';
+include_once 'DataBase.class.php';
 class Notification implements NotifManagerInterface{
     
 

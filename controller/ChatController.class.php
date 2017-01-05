@@ -11,7 +11,6 @@ class ChatController extends Controller{
     public function refresh_messages(){
         if($last_id = parent::get_manager()->refresh_messages()){
             $messages = Display::display_latest_message($last_id['username'], $last_id['text'], $last_id['timestamp']);
-            
            return array("logged_in"=>true, "change"=>true, "messages"=>$messages);
         }
         else{
@@ -36,7 +35,7 @@ class ChatController extends Controller{
         mysqli_data_seek($result, 0);
         $list = "";
         while($row = mysqli_fetch_assoc($result)){
-            $list .= Display::display_single_chat($row, parent::get_manager()->get_session_last_notifs());
+            $list .= Display::display_single_chat($row, parent::get_manager()->get_session_last_notifs(), $_SESSION['last_messages'][$row['id']]);
         }
         return $list; 
     }

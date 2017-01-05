@@ -3,15 +3,18 @@ include_once 'ChatUser.class.php';
 include_once 'DataBase.class.php';
 include_once 'Manager.class.php';
 include_once 'Notification.class.php';
+include_once 'ChatFunctions.class.php';
 class ChatManager extends Manager{
     
     private $exists;
     private $notif_manager;
     private $chat_user_manager;
+    private $chat_function_manager;
     public function __construct($id, $name = "Chat", $people = array()){
         parent::__construct($id, $name, $people);
         $this->notif_manager = new Notification();
         $this->chat_user_manager = new ChatUser(null, null, null, null);
+        $this->chat_function_manager = new ChatFunctions();
         $this->exists = true;
     }
     public function get_session_last_notifs(){
@@ -65,27 +68,27 @@ class ChatManager extends Manager{
     }
 
     public function load_last_id(){
-        $username = $_SESSION['user'];
+        if(!isset($_SESSION['user'])){
+            return;
+        }         
+        //$query = "SELECT LAST FROM chat_lines WHERE chat_id = '".parent::get_id()."'";
+        return $this->chat_function_manager->load_last_message_id(parent::get_id());
+    }
+
+    //TODO remove duplicated code wtf is this
+    public function load_very_last_id(){
         if(!isset($_SESSION['user'])){
             return;
         }         
          
         //$query = "SELECT LAST FROM chat_lines WHERE chat_id = '".parent::get_id()."'";
-        $query1 = "SELECT @last_id := MAX(line_id) FROM chat_lines WHERE chat_id = '".parent::get_id()."'";
-        DataBase::make_query($query1);
-        
-        
-        $query2 = "SELECT * FROM chat_lines WHERE line_id = @last_id"; 
-        $result = DataBase::make_query($query2);
-        $row = mysqli_fetch_assoc($result);
-        return $row;
+        return $this->chat_function_manager->load_very_last_message_id(parent::get_id());
     }
     public function update_timestamp(){
         if(!isset($_SESSION['user'])){
             return;
         }         
-        $query = "UPDATE chats SET timestamp=now() WHERE id='".parent::get_id()."'";
-        DataBase::make_query($query);
+        $this->chat_function_manager->update_timestamp(parent::get_id());
     }
     public function load_chat_lines(){
         if(!isset($_SESSION['user'])){
@@ -134,27 +137,14 @@ class ChatManager extends Manager{
     public function refresh_messages(){
         DataBase::init();
         $last_id = $this->load_last_id();
-        if($_SESSION['last_message_id'] != $last_id['line_id']){
-            $_SESSION['last_message_id'] = $last_id['line_id'];
-            $this->update_timestamp();
-            return $last_id;
-        }
-        return null;
+        return $this->chat_function_manager->check_last_message($last_id);
     }
     public function refresh_chat_list(){
         DataBase::init();
         $result = self::load_chats();
         $num_chats = mysqli_num_rows($result);
         $last_message_diffs = $this->check_last_messages($result);
-        if($num_chats != count($_SESSION['chat_ids']) || $last_message_diffs){
-            $_SESSION['chat_ids'] = array();
-            mysqli_data_seek($result, 0);
-            while($row = mysqli_fetch_assoc($result)){
-                array_push($_SESSION['chat_ids'], $row['id']);
-            }
-            return $result;
-        }
-        return null;
+        return $this->chat_function_manager->check_chat_list($num_chats, $last_message_diffs, $result);
     }
     public function remove_chat($remove_id){
         DataBase::init();
@@ -194,7 +184,7 @@ class ChatManager extends Manager{
         $new_arr = array();
         while($row = mysqli_fetch_assoc($result)){
             $manager = new ChatManager($row['id']);
-            $message = $manager->load_last_id();
+            $message = $manager->load_very_last_id();
             $new_arr[$row['id']] = $message;
             if($_SESSION['last_messages'][$row['id']]['line_id'] != $message['line_id']){
                 $different = true;
