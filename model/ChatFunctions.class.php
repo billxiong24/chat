@@ -16,17 +16,17 @@ class ChatFunctions{
         }
         return null;
     }
-    public function check_chat_list($num_chats, $last_message_diffs, $result){
-        if($num_chats != count($_SESSION['chat_ids']) || $last_message_diffs){
-            $_SESSION['chat_ids'] = array();
+    public function check_chat_list($num_chats, $last_message_diffs, $result, $chat_ids){
+        if($num_chats != count($chat_ids) || $last_message_diffs){
+            $chat_ids = array();
             mysqli_data_seek($result, 0);
             while($row = mysqli_fetch_assoc($result)){
-                array_push($_SESSION['chat_ids'], $row['id']);
+                array_push($chat_ids, $row['id']);
             }
             mysqli_data_seek($result, 0);
-            return $result;
+            return array($result, $chat_ids, $last_message_diffs);
         }
-        return null;
+        return array(null, null);
     }
     public function load_last_message_id($id){
         $query1 = "SELECT @last_id := MAX(line_id) FROM chat_lines WHERE chat_id = '".$id."' AND username <> '".$_SESSION['user']."'";

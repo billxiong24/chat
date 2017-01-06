@@ -1,5 +1,7 @@
 <?php
-
+include_once 'ChatController.class.php';
+include_once 'NotificationController.class.php';
+include_once 'UserController.class.php';
 class SessionController{
     
     private $user;
@@ -32,7 +34,12 @@ class SessionController{
         $this->notif_controller = $notif_controller;
         $this->chat_controller = $chat_controller;
     }
-
+    
+    public function change_controller_attributes($id, $name, array $new_users){
+        $this->user_controller->set_manager_attributes($id, $name, $new_users);
+        $this->notif_controller->set_manager_attributes($id, $name, $new_users);
+        $this->chat_controller->set_manager_attributes($id, $name, $new_users);
+    }
     /* Getters */
     public function get_user(){
         return $this->user; 
@@ -76,7 +83,7 @@ class SessionController{
         $this->last_messages = $messages;
     }
     public function set_last_message_id($id){
-        $this->$last_message_id = $id;
+        $this->last_message_id = $id;
     }
     
 }

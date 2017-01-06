@@ -18,7 +18,8 @@ class Loader{
     private $manager;
     private $chats;
     private $title;
-      
+    private $session_controller;      
+
     public function __construct(){
         DataBase::init();
         $this->init();
@@ -51,19 +52,30 @@ class Loader{
          * on them too much.
          * USING a lot of parallel arrays, coalesce them into an object
          */
+        $userc =  new UserController($this->manager);
+        $notifc =  new NotificationController($this->manager);
+        $chatc =  new ChatController($this->manager);
+        $lci = DataBase::escape($curr_chat['id']);
+        $ln = $this->manager->retrieve_notifications();
+
         $_SESSION['user'] = DataBase::escape($_SESSION['user']);
         $_SESSION['last_chat_id'] = DataBase::escape($curr_chat['id']);
         $_SESSION['last_notifs'] = $this->manager->retrieve_notifications();
         //$_SESSION['manager'] = $this->manager;
         $_SESSION['chat_ids'] = array();
         $_SESSION['last_messages'] = array();
-        $_SESSION['user_controller'] = new UserController($this->manager);
-        $_SESSION['notif_controller'] = new NotificationController($this->manager);
-        $_SESSION['chat_controller'] = new ChatController($this->manager);
 
+        $builder = new SessionControllerBuilder($_SESSION['user'], $userc, $notifc, $chatc);
+        $builder->last_chat_id($lci)->last_notifs($ln)->chat_ids()->last_messages()->last_message_id($_SESSION['last_message_id']);
+
+        $session_controller = $builder->create_session_controller();
+        $this->session_controller = $session_controller;
         $this->title = Display::load_title($curr_chat['name'], $users);
         mysqli_data_seek($chats, 0);
          
+    }
+    public function set_controller(){
+        $_SESSION['session_controller'] = $this->session_controller;
     }
 
     public function load_chat_list(){
@@ -74,9 +86,11 @@ class Loader{
         while($row = mysqli_fetch_assoc($this->chats)){
             array_push($_SESSION['chat_ids'], $row['id']);
             $manager = new ChatManager($row['id']);
+            //TODO optimize multiple queries
             $message = $manager->load_last_id();
+            $message2 = $manager->load_very_last_id();
             $_SESSION['last_messages'][$row['id']] = $message;
-            $chat_list .= Display::display_single_chat($row, $_SESSION['last_notifs'], $message);
+            $chat_list .= Display::display_single_chat($row, $_SESSION['last_notifs'], $message2);
         }
         return $chat_list;
 
@@ -94,6 +108,7 @@ class Loader{
             $chat_lines .= Display::display_latest_message($row['username'], $row['text'], $row['timestamp']);
         }
         $_SESSION['last_message_id'] = DataBase::escape($last_message_id);
+        $this->session_controller->set_last_message_id(DataBase::escape($last_message_id));
         return $chat_lines;
     }
 }

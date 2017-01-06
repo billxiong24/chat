@@ -18,7 +18,7 @@ $_SESSION['loader'] = new Loader();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>ChatIO</title>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Raleway" />
@@ -241,6 +241,10 @@ $_SESSION['loader'] = new Loader();
 </div>
 </div>
 </div>
+<?php
+    $_SESSION['loader']->set_controller();
+    unset($_SESSION['loader']);
+?>
 <!--    <div class="small-chat-box fadeInRight animated">
 
         <div class="heading" draggable="true">
@@ -268,10 +272,22 @@ $_SESSION['loader'] = new Loader();
         </a>
     </div>
 </div> --!>
-
-
-
+<div ng-app="chatio" ng-controller="chatio-control">
+    <div>
+        {{ diff }}    
+        {{ incr }}
+test
+    </div>    
+<form ng-submit="func()">
+<input type="text" value="type something"/>
+</form>
+    <button class="pull-right" ng-click="testAjax()">click</button>
+</div>
+<script type="text/javascript" charset="utf-8">
+    
+</script>
 <!-- Mainly scripts -->
+<script src="js/chat.js"></script>
 <script src="js/jquery-2.1.1.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/plugins/metisMenu/jquery.metisMenu.js"></script>

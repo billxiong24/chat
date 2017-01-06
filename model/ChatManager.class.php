@@ -127,24 +127,26 @@ class ChatManager extends Manager{
     public function change_chat($chat_id){
         DataBase::init();
         $curr = self::load_chat_id($chat_id);
-        $_SESSION['last_chat_id'] = $curr['id'];
+        //$_SESSION['last_chat_id'] = $curr['id'];
+        
         $new_users = self::load_chat_users($curr['id']);
 
         //update manager attributes
         $this->set_attributes($curr['id'], $curr['name'], $new_users);
-        $_SESSION['last_message_id'] = $this->load_last_id()['line_id'];
+        //$_SESSION['last_message_id'] = $this->load_last_id()['line_id'];
+        return $curr;
     }
     public function refresh_messages(){
         DataBase::init();
         $last_id = $this->load_last_id();
         return $this->chat_function_manager->check_last_message($last_id);
     }
-    public function refresh_chat_list(){
+    public function refresh_chat_list($last_messages, $chat_ids){
         DataBase::init();
         $result = self::load_chats();
         $num_chats = mysqli_num_rows($result);
-        $last_message_diffs = $this->check_last_messages($result);
-        return $this->chat_function_manager->check_chat_list($num_chats, $last_message_diffs, $result);
+        $last_message_diffs = $this->check_last_messages($result, $last_messages);
+        return $this->chat_function_manager->check_chat_list($num_chats, $last_message_diffs, $result, $chat_ids);
     }
     public function remove_chat($remove_id){
         DataBase::init();
@@ -178,7 +180,7 @@ class ChatManager extends Manager{
         return $this->notif_manager->compare_notifications($old_arr, $new_arr);
     }
 
-    private function check_last_messages($result){
+    private function check_last_messages($result, $last_messages){
         mysqli_data_seek($result, 0);
         $different = false;
         $new_arr = array();
@@ -186,14 +188,14 @@ class ChatManager extends Manager{
             $manager = new ChatManager($row['id']);
             $message = $manager->load_very_last_id();
             $new_arr[$row['id']] = $message;
-            if($_SESSION['last_messages'][$row['id']]['line_id'] != $message['line_id']){
+            if($last_messages[$row['id']]['line_id'] != $message['line_id']){
                 $different = true;
             }
         }
         if($different){
-            $_SESSION['last_messages'] = $new_arr;
+            return $new_arr;
         }
-        return $different; 
+        return null; 
     }
     private function remove_chat_query(){
         $query = "DELETE FROM chats WHERE id = '".parent::get_id()."'"; 

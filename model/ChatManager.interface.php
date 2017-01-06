@@ -61,7 +61,7 @@ interface ChatManagerInterface{
      * previous session variable. If so, update sessino variable,
      * and return array of new chats
      */
-    function refresh_chat_list();
+    function refresh_chat_list($last_messages, $chat_ids);
 
     /**
      * Remove all elements of chat with remove_id from database.

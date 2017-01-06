@@ -18,8 +18,11 @@ class ChatController extends Controller{
         }
     } 
     public function refresh_chat_list(){
-        if($result = parent::get_manager()->refresh_chat_list()){
-            $list = $this->render_chats($result);
+list($result, $new_ids, $last_diff) = parent::get_manager()->refresh_chat_list($_SESSION['last_messages'], $_SESSION['chat_ids']);
+        if($result && $new_ids){
+            $_SESSION['chat_ids'] = $new_ids;
+            $_SESSION['last_messages'] = $last_diff;
+            $list = $this->render_chats($result, $last_diff);
             return array("change"=>true, "newList"=>$list);
         }
         else{
@@ -31,7 +34,7 @@ class ChatController extends Controller{
         return array("list"=>Display::reload_delete($chats));
     }
 
-    private function render_chats($result){
+    private function render_chats($result, $last_messages){
         mysqli_data_seek($result, 0);
         $list = "";
         while($row = mysqli_fetch_assoc($result)){

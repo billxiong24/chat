@@ -52,7 +52,7 @@ abstract class Manager implements ChatManagerInterface{
     public abstract function add_user($new_user);
     public abstract function change_chat($chat_id);
     public abstract function refresh_messages();
-    public abstract function refresh_chat_list();
+    public abstract function refresh_chat_list($last_messages, $chat_ids);
     public abstract function remove_chat($remove_id);
     public abstract function increment_notifications();
     public abstract function retrieve_notifications();

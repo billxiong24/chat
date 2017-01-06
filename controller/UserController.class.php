@@ -18,13 +18,14 @@ class UserController extends Controller{
 
     public function change_chat($chat_id){
         $manager = parent::get_manager();
-        parent::get_manager()->change_chat($chat_id);
+        $curr = parent::get_manager()->change_chat($chat_id);
         $title = Display::load_title($manager->get_name(), $manager->get_users());
-
         /**
          * TODO find a way to cache the messages so we don't 
          * have to reload them everytime user changes chats. 
          */
+        $_SESSION['last_chat_id'] = $curr['id'];
+        $_SESSION['last_message_id'] = parent::get_manager()->load_last_id()['line_id'];
         $messages = Display::change_messages($manager);
         return array("title"=>$title, "messages"=>$messages[0]);
     }
